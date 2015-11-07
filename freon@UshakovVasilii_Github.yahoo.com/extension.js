@@ -24,6 +24,7 @@ const _ = Gettext.gettext;
 const FreonMenuButton = new Lang.Class({
     Name: 'FreonMenuButton',
     Extends: PanelMenu.Button,
+    max: 0,
 
     _init: function(){
         this.parent(St.Align.START);
@@ -58,7 +59,7 @@ const FreonMenuButton = new Lang.Class({
             this._createHotItem(s, showIcon);
         }
 
-        if(hotSensors.length == 0){
+        if(hotSensors.length === 0){
             this._createInitialIcon();
         }
 
@@ -286,13 +287,13 @@ const FreonMenuButton = new Lang.Class({
         if (tempInfo.length > 0){
             let total = 0;
             let sum = 0;
-            let max = 0;
+            // let max = 0;
             for each (let i in tempInfo){
                 if(i.temp !== null){
                     total++;
     	            sum += i.temp;
-    	            if (i.temp > max)
-    	                max = i.temp;
+    	            if (i.temp > this.max)
+    	                this.max = i.temp;
                 }
             }
 
@@ -317,7 +318,7 @@ const FreonMenuButton = new Lang.Class({
 
                 // Add average and maximum entries
                 sensors.push({type:'temperature-average', label:_("Average"), value:this._formatTemp(sum/total)});
-                sensors.push({type:'temperature-maximum', label:_("Maximum"), value:this._formatTemp(max)});
+                sensors.push({type:'temperature-maximum', label:_("Maximum"), value:this._formatTemp(this.max)});
 
                 if(fanInfo.length > 0 || voltageInfo.length > 0)
                     sensors.push({type : 'separator'});
@@ -353,12 +354,13 @@ const FreonMenuButton = new Lang.Class({
 
             this._fixNames(sensors);
 
-            for each (let s in sensors)
+            for each (let s in sensors) {
                 if(s.type != 'separator') {
                     let l = this._hotLabels[s.label];
                     if(l)
                         l.set_text(s.value);
                 }
+            }
 
             if(this._lastSensorsCount && this._lastSensorsCount==sensors.length){
                 for each (let s in sensors) {
@@ -446,7 +448,7 @@ const FreonMenuButton = new Lang.Class({
                         self.main = false;
                     } else {
                         hotSensors.push(self.label);
-                        if(Object.keys(this._hotLabels).length == 0){
+                        if(Object.keys(this._hotLabels).length === 0){
                             this._initialIcon.destroy();
                             this._initialIcon = null;
                         }
@@ -468,7 +470,7 @@ const FreonMenuButton = new Lang.Class({
                         }
                     }
 
-                    if(Object.keys(this._hotLabels).length == 0)
+                    if(Object.keys(this._hotLabels).length === 0)
                         this._createInitialIcon();
 
                     this._settings.set_strv('hot-sensors', hotSensors.filter(
