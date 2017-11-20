@@ -79,6 +79,7 @@ const FreonMenuButton = new Lang.Class({
         this._addSettingChangedSignal('group-voltage', Lang.bind(this, this._rerender))
 
         this.connect('destroy', Lang.bind(this, this._onDestroy));
+        this._updateDisplayId = this.connect('update-display', Lang.bind(this, this._updateDisplay));
 
         // don't postprone the first call by update-time.
         this._querySensors();
@@ -157,7 +158,7 @@ const FreonMenuButton = new Lang.Class({
                 break;
             case 'udisks2':
                 this._utils.disks = new UDisks2.UDisks2(Lang.bind(this, function() {
-                    this._updateDisplay();
+                    this.emit('update-display')
                 }));
                 break;
         }
@@ -222,13 +223,16 @@ const FreonMenuButton = new Lang.Class({
         for each (let signal in this._settingChangedSignals){
             this._settings.disconnect(signal);
         };
+
+        this.disconnect(this._updateDisplayId);
+        this._updateDisplayId = 0;
     },
 
     _querySensors: function(){
         for each (let sensor in this._utils) {
             if (sensor.available) {
                 sensor.execute(Lang.bind(this,function(){
-                    this._updateDisplay();
+                    this.emit('update-display');
                 }));
             }
         }
