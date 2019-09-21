@@ -161,7 +161,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         };
 
         let p = this.positionInPanel;
-        boxes[p].insert_child_at_index(this.container, p == 'right' ? 0 : -1)
+        boxes[p].insert_child_at_index(this.container, p == 'right' ? 1 : -1)
     }
 
     _showIconOnPanelChanged(){
