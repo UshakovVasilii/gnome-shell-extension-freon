@@ -1,5 +1,5 @@
 {
-  "shell-version": ["40", "41"],
+  "shell-version": ["40", "40.3.0", "41"],
   "uuid": "freon@UshakovVasilii_Github.yahoo.com",
   "name": "Freon",
   "description": "Shows CPU temperature, disk temperature, video card temperature (NVIDIA/Catalyst/Bumblebee&NVIDIA), voltage and fan RPM (forked from xtranophilist/gnome-shell-extension-sensors)",
