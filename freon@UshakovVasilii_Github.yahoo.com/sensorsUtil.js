@@ -37,30 +37,26 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
     }
 
     get temp() {
-        return this._parseGenericSensorsOutput(/^temp\d+_input/, 'temp');
+        return this._parseSensorsOutput(/^temp\d+_input/, 'temp', 'generic');
     }
 
     get gpu() {
-        return this._parseGpuSensorsOutput(/^temp\d+_input/, 'temp');
+        return this._parseSensorsOutput(/^temp\d+_input/, 'temp', 'gpu');
+    }
+
+    get disks() {
+        return this._parseSensorsOutput(/^temp\d+_input/, 'temp', 'disk');
     }
 
     get rpm() {
-        return this._parseGenericSensorsOutput(/^fan\d+_input/, 'rpm');
+        return this._parseSensorsOutput(/^fan\d+_input/, 'rpm', 'generic');
     }
 
     get volt() {
-        return this._parseGenericSensorsOutput(/^in\d+_input/, 'volt');
+        return this._parseSensorsOutput(/^in\d+_input/, 'volt', 'generic');
     }
 
-    _parseGenericSensorsOutput(sensorFilter, sensorType) {
-        return this._parseSensorsOutput(sensorFilter, sensorType, false);
-    }
-
-    _parseGpuSensorsOutput(sensorFilter, sensorType) {
-        return this._parseSensorsOutput(sensorFilter, sensorType, true);
-    }
-
-  _parseSensorsOutput(sensorFilter, sensorType, gpuFlag) {
+  _parseSensorsOutput(sensorFilter, sensorType, sensorFamily) {
         if(!this._data)
             return [];
 
@@ -68,8 +64,16 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
 
         let sensors = [];
         for (var chipset in data) {
+            let tempType = (sensorType === 'temp')
+
             let gpuFilter = /(radeon|amdgpu|nouveau)/;
-            if (!data.hasOwnProperty(chipset) || (gpuFlag != gpuFilter.test(chipset) && sensorType === 'temp'))
+            let gpuFamily = (sensorFamily === 'gpu')
+            if (!data.hasOwnProperty(chipset) || (gpuFamily != gpuFilter.test(chipset) && tempType))
+                continue;
+
+            let diskFilter = /(drivetemp)/;
+            let diskFamily = (sensorFamily === 'disk')
+            if (!data.hasOwnProperty(chipset) || (diskFamily != diskFilter.test(chipset) && tempType))
                 continue;
 
             let chipsetSensors = data[chipset]

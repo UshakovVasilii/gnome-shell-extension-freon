@@ -358,9 +358,9 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         if (this._settings.get_boolean('show-voltage'))
             voltageInfo = this._utils.sensors.volt;
 
-        let driveTempInfo = [];
+        let driveTempInfo = this._utils.sensors.disks;
         if(this._utils.disks && this._utils.disks.available) {
-            driveTempInfo = this._utils.disks.temp;
+            driveTempInfo = driveTempInfo.concat(this._utils.disks.temp);
         }
 
         if (this._utils.liquidctl && this._utils.liquidctl.available) {
@@ -381,7 +381,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             let sum = 0;
             let max = 0;
             for (let i of tempInfo){
-                if(i.temp !== null && i.temp > 0){
+                if(i.temp !== null && i.temp >= 0){
                     total++;
     	            sum += i.temp;
     	            if (i.temp > max)
@@ -424,15 +424,13 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
 
             if(sensorsTempInfo.length > 0 && this._settings.get_boolean('group-temperature')){
                 sum = 0;
-                let sensorsTempLength = 0
                 for (let i of sensorsTempInfo){
                     sum += i.temp;
-                    if(i.temp > 0) sensorsTempLength++;
                 }
                 sensors.push({
                     type:'temperature-group',
                     label:'temperature-group',
-                    value: this._formatTemp(sum / sensorsTempLength)});
+                    value: this._formatTemp(sum / sensorsTempInfo.length)});
             }
 
             for (let fan of fanInfo){
