@@ -71,7 +71,7 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
             if (!data.hasOwnProperty(chipset) || (gpuFamily != gpuFilter.test(chipset) && tempType))
                 continue;
 
-            let diskFilter = /(drivetemp)/;
+            let diskFilter = /(drivetemp|nvme)/;
             let diskFamily = (sensorFamily === 'disk')
             if (!data.hasOwnProperty(chipset) || (diskFamily != diskFilter.test(chipset) && tempType))
                 continue;
