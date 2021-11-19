@@ -26,82 +26,161 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
         this._settings = ExtensionUtils.getSettings();
 
         let i = 0;
+        let j = 0;
 
-        this.attach(new Gtk.Label({ label: _('Poll Sensors Every (sec)'), halign : Gtk.Align.END}), 0, i, 1, 1);
-        let updateTime = Gtk.SpinButton.new_with_range (1, 60, 1);
-        this.attach(updateTime, 1, i++, 1, 1);
-        this._settings.bind('update-time', updateTime, 'value', Gio.SettingsBindFlags.DEFAULT);
-
-        this._addSwitch({key : 'show-decimal-value', y : i, x : 0,
-            label : _('Show Decimal Value'),
-            help : _("Show one digit after decimal")});
-
-        this._addComboBox({
-            items : {centigrade : "\u00b0C", fahrenheit : "\u00b0F"},
-            key: 'unit', y : i++, x : 3,
-            label: _('Temperature Unit')
+        this._addLabel({
+            label: _('Display Options'),
+            y : i++, x : j
         });
 
+        this._addLabel({
+            label: _('Poll Sensors Every (sec)'),
+            y : i, x : j
+        });
+
+        let updateTime = Gtk.SpinButton.new_with_range (1, 60, 1);
+        this.attach(updateTime, j + 1, i++, 1, 1);
+        this._settings.bind('update-time', updateTime, 'value', Gio.SettingsBindFlags.DEFAULT);
+
         this._addComboBox({
+            label: _('Position in Panel'),
             items : {left : _('Left'), center : _('Center'), right : _('Right')},
-            key: 'position-in-panel', y : i, x : 0,
-            label: _('Position in Panel')
+            key: 'position-in-panel', y : i++, x : j
+        });
+
+        this._addLabel({
+            label: _('Index in Panel'),
+            y : i, x : j
         });
 
         let panelBoxIndex = Gtk.SpinButton.new_with_range (-1, 20, 1);
-        this.attach(panelBoxIndex, 2, i, 1, 1);
+        this.attach(panelBoxIndex, j + 1, i++, 1, 1);
         this._settings.bind('panel-box-index', panelBoxIndex, 'value', Gio.SettingsBindFlags.DEFAULT);
 
-        this._addSwitch({key : 'show-degrees-on-panel', y : i++, x : 3,
-            label : _('Show \u00b0C/\u00b0F on Panel')});
+        this._addSwitch({key : 'show-icon-on-panel', y : i++, x : j,
+            label : _('Show Icon')});
 
-        this._addSwitch({key : 'show-icon-on-panel', y : i++, x : 3,
-            label : _('Show Icon on Panel')});
+        this._addComboBox({
+            label: 'Temperature Unit',
+            items : {centigrade : "\u00b0C", fahrenheit : "\u00b0F"},
+            key: 'unit', y : i++, x : j
+        });
 
-        this._addSwitch({key : 'show-fan-rpm', y : i, x : 0,
-            label : _('Show Fan Speed')});
+        this._addSwitch({key : 'show-degrees-on-panel', y : i++, x : j,
+            label : _('Show Temperature Unit')});
 
-        this._addSwitch({key : 'show-voltage', y : i++, x : 3,
-            label : _('Show Power Supply Voltage')});
+        this._addSwitch({key : 'show-rpm-on-panel', y : i++, x : j,
+            label : _('Show Fan Speed Unit')});
 
-        this._addSwitch({key : 'group-temperature', y : i, x : 0,
-            label : _('Group Temperature Items'),
+        this._addSwitch({key : 'show-volts-on-panel', y : i++, x : j,
+            label : _('Show Voltage Unit')});
+
+        this._addSwitch({key : 'show-decimal-value', y : i++, x : j,
+            label : _('Show Decimal Value'),
+            help : _("Show one digit after decimal")});
+
+        i = 0;
+        j = 3;
+
+        this._addLabel({
+            label: _('Generic sensors'),
+            y : i++, x : j
+        });
+
+        this._addSwitch({key : 'use-generic-lmsensors', y : i++, x : j,
+            label : 'lm-sensors',
+            help : _('Read sensors using sensors from lm-sensors')});
+
+        this._addSwitch({key : 'use-generic-liquidctl', y : i++, x : j,
+            label : 'liquidctl',
+            help : _('Read sensors using liquidctl v1.7.0 or later')});
+
+        this._addLabel({
+            label: _('GPU sensors'),
+            y : i++, x : j
+        });
+
+        this._addSwitch({key : 'use-gpu-nvidia', y : i++, x : j,
+            label : 'Nvidia'});
+
+        this._addSwitch({key : 'use-gpu-bumblebeenvidia', y : i++, x : j,
+            label : 'Bumblebee + Nvidia'});
+
+        this._addSwitch({key : 'use-gpu-aticonfig', y : i++, x : j,
+            label : 'Catalyst'});
+
+        this._addLabel({
+            label: _('Drive sensors'),
+            y : i++, x : j
+        });
+
+        this._addSwitch({key : 'use-drive-udisks2', y : i++, x : j,
+            label : 'Udisks2'});
+
+        this._addSwitch({key : 'use-drive-hddtemp', y : i++, x : j,
+            label : 'Hddtemp'});
+
+        this._addSwitch({key : 'use-drive-smartctl', y : i++, x : j,
+            label : 'smartctl',
+            help : _('Read drive sensors from smartctl from smartmontools')});
+
+        this._addSwitch({key : 'use-drive-nvmecli', y : i++, x : j,
+            label : 'nvme-cli'});
+
+        i = 0;
+        j = 6;
+
+        this._addLabel({
+            label: _('Show Sensors'),
+            y : i++, x : j
+        });
+
+        this._addSwitch({key : 'show-temperature', y : i++, x : j,
+            label : _('Temperature')});
+
+        this._addSwitch({key : 'show-fan-rpm', y : i++, x : j,
+            label : _('Fan Speed')});
+
+        this._addSwitch({key : 'show-voltage', y : i++, x : j,
+            label : _('Voltage')});
+
+        this._addLabel({
+            label: _('Group Items'),
+            y : i++, x : j
+        });
+
+        this._addSwitch({key : 'group-temperature', y : i++, x : j,
+            label : _('Temperature'),
             help : _("Works if you have more than three temperature sensors")});
 
-        this._addSwitch({key : 'group-voltage', y : i++, x : 3,
-            label : _('Group Voltage Items'),
+        this._addSwitch({key : 'group-rpm', y : i++, x : j,
+            label : _('Fan speed'),
+            help : _("Works if you have more than three fan speed sensors")});
+
+        this._addSwitch({key : 'group-voltage', y : i++, x : j,
+            label : _('Voltage'),
             help : _("Works if you have more than three voltage sensors")});
+    }
 
-        this._addComboBox({
-            items : {none : _('None'), hddtemp : 'Hddtemp', udisks2 : 'UDisks2', smartctl : 'smartctl', nvmecli : 'nvme-cli'},
-            key: 'drive-utility', y : i, x : 0,
-            label: _('HDD/SSD Temperature Utility')
-        });
+    _addLabel(params){
+        let lbl = new Gtk.Label({label: params.label,halign : Gtk.Align.END});
+        this.attach(lbl, params.x, params.y, 1, 1);
 
-        this._addComboBox({
-            items : {
-                'none' : _('None'),
-                'nvidia-settings' : _('NVIDIA'),
-                'aticonfig' : _('Catalyst'),
-                'bumblebee-nvidia-smi': _('Bumblebee + NVIDIA') },
-            key: 'gpu-utility', y : i++, x : 3,
-            label: _('Video Card Temperature Utility')
-        });
-
-        this._addSwitch({key : 'show-liquidctl', y : i++, x : 3,
-            label : _('Show liquidctl Sensors'),
-            help : _('Show data from liquidctl v1.7.0 or later')});
+        if(params.help){
+            lbl.set_tooltip_text(params.help);
+        }
     }
 
     _addSwitch(params){
-        let lbl = new Gtk.Label({label: params.label,halign : Gtk.Align.END});
-        this.attach(lbl, params.x, params.y, 1, 1);
+        this._addLabel(params);
+
         let sw = new Gtk.Switch({halign : Gtk.Align.END, valign : Gtk.Align.CENTER});
         this.attach(sw, params.x + 1, params.y, 1, 1);
+
         if(params.help){
-            lbl.set_tooltip_text(params.help);
             sw.set_tooltip_text(params.help);
         }
+
         this._settings.bind(params.key, sw, 'active', Gio.SettingsBindFlags.DEFAULT);
     }
 
@@ -127,7 +206,8 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
             this._settings.set_string(params.key, model.get_value(iter, 0))
         });
 
-        this.attach(new Gtk.Label({ label: params.label, halign : Gtk.Align.END}), params.x, params.y, 1, 1);
+        this._addLabel(params);
+
         this.attach(combobox, params.x + 1, params.y, 1, 1);
     }
 });

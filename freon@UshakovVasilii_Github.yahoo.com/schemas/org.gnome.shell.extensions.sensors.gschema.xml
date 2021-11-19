@@ -3,70 +3,16 @@
 
   <schema id="org.gnome.shell.extensions.freon" path="/org/gnome/shell/extensions/freon/">
 
-    <key type="i" name="update-time">
-      <default>5</default>
-      <summary>Seconds before next update</summary>
-      <description>This is the seconds after CPU temperature extension updates the data from the syetem</description>
-    </key>
-
-    <key type="s" name="unit">
-      <default>'centigrade'</default>
-      <summary>Unit</summary>
-      <description>The unit ('centigrade' or 'fahrenheit') the extension should display the temperature in</description>
-    </key>
-    
-    <key type="b" name="show-degrees-on-panel">
-      <default>true</default>
-      <summary>Show degrees celsius/fahrenheit on Panel</summary>
-      <description>Show degrees celsius/fahrenheit on Panel</description>
-    </key>
-
-    <key type="b" name="show-icon-on-panel">
-      <default>true</default>
-      <summary>Show Icon on Panel</summary>
-      <description>Show sensor icon on top panel</description>
-    </key>
-
     <key name="hot-sensors" type="as">
       <default>["__average__", "__max__"]</default>
       <summary>Sensors to show in panel</summary>
       <description>Select the sensord whose values has to be shown in the panel</description>
     </key>
 
-    <key type="b" name="show-decimal-value">
-      <default>false</default>
-      <summary>Show decimal value</summary>
-      <description>Show one digit after decimal</description>
-    </key>
-
-    <key type="b" name="show-fan-rpm">
-      <default>true</default>
-      <summary>Display Fan RPM</summary>
-      <description>Display fan rotation per minute</description>
-    </key>
-
-    <key type="b" name="show-voltage">
-      <default>true</default>
-      <summary>Display voltage</summary>
-      <description>Display voltage of various components</description>
-    </key>
-
-    <key type="s" name="drive-utility">
-      <default>'udisks2'</default>
-      <summary>Utility for detect HDD/SSD temperature</summary>
-      <description>Utility for detect HDD/SSD temperature ('none', 'hddtemp' or 'udisks2')</description>
-    </key>
-
-    <key type="s" name="gpu-utility">
-      <default>'none'</default>
-      <summary>Utility for detect video card temperature</summary>
-      <description>Utility for detect video card temperature ('none', 'nvidia-settings' or 'aticonfig')</description>
-    </key>
-
-    <key type="b" name="show-liquidctl">
-      <default>false</default>
-      <summary>Show liquidctl sensors</summary>
-      <description>Show data from liquidctl v1.7.0 or later</description>
+    <key type="i" name="update-time">
+      <default>5</default>
+      <summary>Seconds before next update</summary>
+      <description>This is the seconds after CPU temperature extension updates the data from the syetem</description>
     </key>
 
     <key type="s" name="position-in-panel">
@@ -81,10 +27,124 @@
       <description>Index within the selected panel box (0: first, 1: second, ..., -1: last)</description>
     </key>
 
+    <key type="b" name="show-icon-on-panel">
+      <default>true</default>
+      <summary>Show Icon on Panel</summary>
+      <description>Show sensor icon on top panel</description>
+    </key>
+
+    <key type="b" name="show-temperature">
+      <default>true</default>
+      <summary>Display Temperature</summary>
+      <description>Display temperature</description>
+    </key>
+
+    <key type="s" name="unit">
+      <default>'centigrade'</default>
+      <summary>Unit</summary>
+      <description>The unit ('centigrade' or 'fahrenheit') the extension should display the temperature in</description>
+    </key>
+
+    <key type="b" name="show-degrees-on-panel">
+      <default>true</default>
+      <summary>Show degrees celsius/fahrenheit on Panel</summary>
+      <description>Show degrees celsius/fahrenheit on Panel</description>
+    </key>
+
+    <key type="b" name="show-rpm-on-panel">
+      <default>true</default>
+      <summary>Show RPM on Panel</summary>
+      <description>Show RPM on Panel</description>
+    </key>
+
+    <key type="b" name="show-volts-on-panel">
+      <default>true</default>
+      <summary>Show volts on Panel</summary>
+      <description>Show volts on Panel</description>
+    </key>
+
+    <key type="b" name="show-decimal-value">
+      <default>false</default>
+      <summary>Show decimal value</summary>
+      <description>Show one digit after decimal</description>
+    </key>
+
+    <key type="b" name="use-generic-lmsensors">
+      <default>true</default>
+      <summary>Read sensors using lm-sensors</summary>
+      <description>Read sensors using sensors from lm-sensors</description>
+    </key>
+
+    <key type="b" name="use-generic-liquidctl">
+      <default>false</default>
+      <summary>Read sensors using liquidctl</summary>
+      <description>Read sensors using liquidctl v1.7.0 or later</description>
+    </key>
+
+    <key type="b" name="use-gpu-nvidia">
+      <default>false</default>
+      <summary>Read GPU sensors from NVidia driver</summary>
+      <description>Read GPU sensors from NVidia driver</description>
+    </key>
+
+    <key type="b" name="use-gpu-bumblebeenvidia">
+      <default>false</default>
+      <summary>Read GPU sensors from Bumblebee + NVidia driver</summary>
+      <description>Read GPU sensors from Bumblebee + NVidia driver</description>
+    </key>
+
+    <key type="b" name="use-gpu-aticonfig">
+      <default>false</default>
+      <summary>Read GPU sensors from Catalyst driver</summary>
+      <description>Read GPU sensors from Catalyst driver</description>
+    </key>
+
+    <key type="b" name="use-drive-udisks2">
+      <default>false</default>
+      <summary>Read drive sensors from Udisks2</summary>
+      <description>Read drive sensors from Udisks2</description>
+    </key>
+
+    <key type="b" name="use-drive-hddtemp">
+      <default>false</default>
+      <summary>Read drive sensors using Hddtemp</summary>
+      <description>Read drive sensors using Hddtemp</description>
+    </key>
+
+    <key type="b" name="use-drive-smartctl">
+      <default>false</default>
+      <summary>Read drive sensors using smartctl</summary>
+      <description>Read drive sensors using smartctl from smartmontool</description>
+    </key>
+
+    <key type="b" name="use-drive-nvmecli">
+      <default>false</default>
+      <summary>Read drive sensors using nvme-cli</summary>
+      <description>Read drive sensors using nvme-cli</description>
+    </key>
+
+    <key type="b" name="show-fan-rpm">
+      <default>true</default>
+      <summary>Display Fan RPM</summary>
+      <description>Display fan rotation per minute</description>
+    </key>
+
+    <key type="b" name="show-voltage">
+      <default>true</default>
+      <summary>Display voltage</summary>
+      <description>Display voltage of various components</description>
+    </key>
+
     <key type="b" name="group-temperature">
       <default>true</default>
       <summary>Group temperature menu items</summary>
       <description>Group more than three sensors temperature menu items</description>
+    </key>
+
+    <key type="b" name="group-rpm">
+      <default>true</default>
+      <summary>Group Fan speed menu items</summary>
+      <description>Group more than three fan speed menu items</description>
     </key>
 
     <key type="b" name="group-voltage">
