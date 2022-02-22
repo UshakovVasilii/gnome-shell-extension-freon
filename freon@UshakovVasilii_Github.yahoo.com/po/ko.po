@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-06 17:05-0300\n"
+"PO-Revision-Date: 2022-02-22 18:15+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: bumblebeeNvidiaUtil.js:75 prefs.js:82
+msgid "Bumblebee + NVIDIA"
+msgstr "Bumblebee + NVIDIA"
+
+#: extension.js:319
+msgid "Average"
+msgstr "평균"
+
+#: extension.js:320
+msgid "Maximum"
+msgstr "최대"
+
+#: extension.js:341
+#, javascript-format
+msgid "%drpm"
+msgstr "%drpm"
+
+#: extension.js:350
+#, javascript-format
+msgid "%s%.2fV"
+msgstr "%s%.2fV"
+
+#: extension.js:396
+msgid "Please run sensors-detect as root."
+msgstr "먼저 루트 권한으로 sensors-detect를 실행하십시오."
+
+#: extension.js:397
+msgid ""
+"Please install lm_sensors.\n"
+"If this doesn't help, click here to report with your sensors output!"
+msgstr ""
+"lm_sensors를 설치하십시오.\n"
+"도움이 안 된다면, 클릭하여 장치의 센서 출력이 포함된 오류 보고를 보내십시오!"
+
+#: extension.js:488
+msgid "Temperature Sensors"
+msgstr "온도 센서"
+
+#: extension.js:495
+msgid "Voltage"
+msgstr "전압"
+
+#: extension.js:509
+msgid "Sensors Settings"
+msgstr "센서 설정"
+
+#: prefs.js:33
+msgid "Poll Sensors Every (sec)"
+msgstr "폴링 센서 (초)"
+
+#: prefs.js:39
+msgid "Show Decimal Value"
+msgstr "십진법으로 표시"
+
+#: prefs.js:40
+msgid "Show one digit after decimal"
+msgstr "십진법 옆에 한 자릿 수 표시"
+
+#: prefs.js:45
+msgid "Temperature Unit"
+msgstr "온도 단위"
+
+#: prefs.js:51
+msgid "Position in Panel"
+msgstr "패널 내 아이콘 위치"
+
+#: prefs.js:55
+msgid "Show Icon on Panel"
+msgstr "패널에 아이콘 표시"
+
+#: prefs.js:58
+msgid "Show Fan Speed"
+msgstr "팬 속도 표시"
+
+#: prefs.js:61
+msgid "Show Power Supply Voltage"
+msgstr "전원 공급 장치 전압 표시"
+
+#: prefs.js:64
+msgid "Group Temperature Items"
+msgstr "그룹화된 온도 항목"
+
+#: prefs.js:65
+msgid "Works if you have more than three temperature sensors"
+msgstr "3개 이상의 온도 센서가 감지되었을 때 동작"
+
+#: prefs.js:68
+msgid "Group Voltage Items"
+msgstr "그룹화된 전압 항목"
+
+#: prefs.js:69
+msgid "Works if you have more than three voltage sensors"
+msgstr "3개 이상의 전압 센서가 감지되었을 때 동작"
+
+#: prefs.js:74
+msgid "HDD/SSD Temperature Utility"
+msgstr "하드디스크/SSD 온도 유틸리티"
+
+#: prefs.js:79
+msgid "None"
+msgstr "없음"
+
+#: prefs.js:80
+msgid "NVIDIA"
+msgstr "NVIDIA"
+
+#: prefs.js:81
+msgid "Catalyst"
+msgstr "AMD 카탈리스트"
+
+#: prefs.js:84
+msgid "Video Card Temperature Utility"
+msgstr "그래픽 카드 온도 유틸리티"
+
+#: prefs.js:49
+msgid "Left"
+msgstr "왼쪽"
+
+#: prefs.js:49
+msgid "Center"
+msgstr "가운데"
+
+#: prefs.js:49
+msgid "Right"
+msgstr "오른쪽"
+
+#: extension.js:479
+msgid "Go to the Freon wiki"
+msgstr "프레온 위키로 이동"
+
+#: extension.js:486
+msgid "Sensor Settings"
+msgstr "센서 설정"
