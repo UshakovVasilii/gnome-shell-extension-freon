@@ -686,7 +686,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             }
 
             for (let fan of fanInfo){
-                const unit = this._settings.get_boolean('show-rotationrate-unit') ? _('rpm'): '';
+                const unit = this._settings.get_boolean('show-rotationrate-unit') ? _(' rpm'): '';
 
                 sensors.push({
                     icon: 'fan',
