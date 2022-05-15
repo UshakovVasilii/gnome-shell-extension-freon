@@ -556,9 +556,9 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             if (this._settings.get_boolean('show-temperature'))
                 gpuTempInfo = gpuTempInfo.concat(this._utils.nvidia.temp);
 
-        if (this._utils.bumblebeenvidia && this._utils.bumblebeenvidia.available)
+        if (this._utils.nvidiabumblebee && this._utils.nvidiabumblebee.available)
             if (this._settings.get_boolean('show-temperature'))
-                gpuTempInfo = gpuTempInfo.concat(this._utils.bumblebeenvidia.temp);
+                gpuTempInfo = gpuTempInfo.concat(this._utils.nvidiabumblebee.temp);
 
         if (this._utils.aticonfig && this._utils.aticonfig.available)
             if (this._settings.get_boolean('show-temperature'))
