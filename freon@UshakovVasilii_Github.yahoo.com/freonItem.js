@@ -11,7 +11,7 @@ var FreonItem = GObject.registerClass(class FreonItem extends PopupMenu.PopupBas
         this._key = key;
         this._gIcon = gIcon;
 
-        this._labelActor = new St.Label({text: displayName ? displayName : label, x_align: Clutter.ActorAlign.START, x_expand: true});
+        this._labelActor = new St.Label({text: displayName ? displayName : label, x_align: Clutter.ActorAlign.CENTER, x_expand: true});
         this.actor.add(new St.Icon({ style_class: 'popup-menu-icon', gicon : gIcon}));
         this.actor.add_child(this._labelActor);
         this._valueLabel = new St.Label({text: value});
