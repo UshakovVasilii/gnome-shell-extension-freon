@@ -63,6 +63,18 @@
       <description>Show volts on Panel</description>
     </key>
 
+    <key type="b" name="show-power">
+      <default>true</default>
+      <summary>Display Power</summary>
+      <description>Display power</description>
+    </key>
+
+    <key type="b" name="show-power-unit">
+      <default>true</default>
+      <summary>Show Watts on Panel</summary>
+      <description>Show Watts on Panel</description>
+    </key>
+
     <key type="b" name="show-decimal-value">
       <default>false</default>
       <summary>Show decimal value</summary>

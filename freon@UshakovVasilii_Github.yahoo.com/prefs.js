@@ -75,6 +75,9 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
         this._addSwitch({key : 'show-voltage-unit', y : i++, x : j,
             label : _('Show Voltage Unit')});
 
+        this._addSwitch({key : 'show-power-unit', y : i++, x : j,
+            label : _('Show Power Unit')});
+
         this._addSwitch({key : 'show-decimal-value', y : i++, x : j,
             label : _('Show Decimal Values'),
             help : _("Show additionnal digits after decimal point")});
@@ -156,6 +159,9 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
         this._addSwitch({key : 'show-voltage', y : i++, x : j,
             label : _('Voltage')});
 
+        this._addSwitch({key : 'show-power', y : i++, x : j,
+            label : _('Power')});
+
         this._addLabel({
             label: _('Group Items'),
             y : i++, x : j
@@ -172,7 +178,7 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
         this._addSwitch({key : 'group-voltage', y : i++, x : j,
             label : _('Voltage'),
             help : _("Group three or more voltage sensors")});
-    }
+       }
 
     _addLabel(params){
         let lbl = new Gtk.Label({label: params.label,halign : Gtk.Align.END});

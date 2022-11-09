@@ -85,6 +85,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._initNvmecliUtility();
 
         let temperatureIcon = Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-temperature-symbolic.svg');
+        let voltageIcon = Gio.icon_new_for_string(Me.path + '/icons/freon-voltage-symbolic.svg');
 
         this._sensorIcons = {
             'temperature' : temperatureIcon,
@@ -92,8 +93,9 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             'temperature-maximum' : temperatureIcon,
             'gpu-temperature' : Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-gpu-temperature-symbolic.svg'),
             'drive-temperature' : Gio.icon_new_for_string('drive-harddisk-symbolic'),
-            'voltage' : Gio.icon_new_for_string(Me.path + '/icons/freon-voltage-symbolic.svg'),
-            'fan' : Gio.icon_new_for_string(Me.path + '/icons/freon-fan-symbolic.svg')
+            'voltage' : voltageIcon,
+            'fan' : Gio.icon_new_for_string(Me.path + '/icons/freon-fan-symbolic.svg'),
+            'power' : voltageIcon,
         }
 
         this._menuLayout = new St.BoxLayout();
@@ -127,6 +129,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._addSettingChangedSignal('unit', this._querySensors.bind(this));
         this._addSettingChangedSignal('show-rotationrate-unit', this._updateUI.bind(this));
         this._addSettingChangedSignal('show-voltage-unit', this._updateUI.bind(this));
+        this._addSettingChangedSignal('show-power-unit', this._updateUI.bind(this));
 
         this._addSettingChangedSignal('show-decimal-value', this._querySensors.bind(this));
 
@@ -147,6 +150,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._addSettingChangedSignal('show-temperature', this._rerender.bind(this));
         this._addSettingChangedSignal('show-rotationrate', this._rerender.bind(this));
         this._addSettingChangedSignal('show-voltage', this._rerender.bind(this));
+        this._addSettingChangedSignal('show-power', this._rerender.bind(this));
 
         this._addSettingChangedSignal('group-temperature', this._rerender.bind(this))
         this._addSettingChangedSignal('group-rotationrate', this._rerender.bind(this))
@@ -520,6 +524,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         let driveTempInfo = [];
         let fanInfo = [];
         let voltageInfo = [];
+        let powerInfo = [];
 
         if (this._utils.sensors && this._utils.sensors.available) {
             if (this._settings.get_boolean('show-temperature')) {
@@ -532,6 +537,8 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
                 fanInfo = fanInfo.concat(this._utils.sensors.rpm);
             if (this._settings.get_boolean('show-voltage'))
                 voltageInfo = voltageInfo.concat(this._utils.sensors.volt);
+            if (this._settings.get_boolean('show-power'))
+                powerInfo = powerInfo.concat(this._utils.sensors.power);
         }
 
         if (this._utils.freeipmi && this._utils.freeipmi.available) {
@@ -584,6 +591,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         driveTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
         fanInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
         voltageInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
+        powerInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
 
         let tempInfo = gpuTempInfo.concat(sensorsTempInfo).concat(driveTempInfo);
 
@@ -708,6 +716,17 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
                     label: voltage.label,
                     value: _("%s%.2f%s").format(((voltage.volt >= 0) ? '+' : ''),
                     voltage.volt, unit)});
+            }
+
+            for (let power of powerInfo){
+                const unit = this._settings.get_boolean('show-power-unit') ? _('W'): '';
+
+                sensors.push({
+                    icon: 'power',
+                    type: 'power',
+                    label: power.label,
+                    value: _("%s%.2f%s").format(((power.power >= 0) ? '+' : ''),
+                    power.power, unit)});
             }
 
             this._fixNames(sensors);

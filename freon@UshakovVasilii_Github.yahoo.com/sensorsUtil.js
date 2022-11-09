@@ -56,6 +56,10 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
         return this._parseSensorsOutput(/^in\d+_input/, 'volt', 'generic');
     }
 
+    get power() {
+        return this._parseSensorsOutput(/^power\d+_average/, 'power', 'gpu');
+    }
+
   _parseSensorsOutput(sensorFilter, sensorType, sensorFamily) {
         if(!this._data)
             return [];
@@ -65,10 +69,12 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
         let sensors = [];
         for (var chipset in data) {
             let tempType = (sensorType === 'temp')
+            let powerType = (sensorType === 'power')
 
             let gpuFilter = /(radeon|amdgpu|nouveau)/;
             let gpuFamily = (sensorFamily === 'gpu')
-            if (!data.hasOwnProperty(chipset) || (gpuFamily != gpuFilter.test(chipset) && tempType))
+
+            if (!data.hasOwnProperty(chipset) || (gpuFamily != gpuFilter.test(chipset) && (tempType || powerType)))
                 continue;
 
             let diskFilter = /(drivetemp|nvme)/;
