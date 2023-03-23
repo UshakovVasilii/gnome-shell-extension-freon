@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-06 17:05-0300\n"
+"PO-Revision-Date: 2023-03-23 16:23+0100\n"
+"Last-Translator: Amerey.eu <info@amerey.eu>\n"
+"Language-Team: \n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: bumblebeeNvidiaUtil.js:75 prefs.js:82
+msgid "Bumblebee + NVIDIA"
+msgstr "Bumblebee + NVIDIA"
+
+#: extension.js:319
+msgid "Average"
+msgstr "Průměr"
+
+#: extension.js:320
+msgid "Maximum"
+msgstr "Maximum"
+
+#: extension.js:341
+#, javascript-format
+msgid "%drpm"
+msgstr "%drpm"
+
+#: extension.js:350
+#, javascript-format
+msgid "%s%.2fV"
+msgstr "%s%.2fV"
+
+#: extension.js:396
+msgid "Please run sensors-detect as root."
+msgstr "Spusťte prosím detekci senzorů jako root."
+
+#: extension.js:397
+msgid ""
+"Please install lm_sensors.\n"
+"If this doesn't help, click here to report with your sensors output!"
+msgstr ""
+"Nainstalujte prosím lm_sensors.\n"
+"Pokud to nepomůže, klikněte sem a nahlaste výstup ze senzorů!"
+
+#: extension.js:488
+msgid "Temperature Sensors"
+msgstr "Snímače teploty"
+
+#: extension.js:495
+msgid "Voltage"
+msgstr "Napětí"
+
+#: extension.js:509
+msgid "Sensors Settings"
+msgstr "Nastavení senzorů"
+
+#: prefs.js:33
+msgid "Poll Sensors Every (sec)"
+msgstr "Aktualizovat každých (sekund)"
+
+#: prefs.js:39
+msgid "Show Decimal Value"
+msgstr "Zobrazit desetiny"
+
+#: prefs.js:40
+msgid "Show one digit after decimal"
+msgstr "Zobrazit jednu číslici za desetinnou čárkou"
+
+#: prefs.js:45
+msgid "Temperature Unit"
+msgstr "Jednotka teploty"
+
+#: prefs.js:51
+msgid "Position in Panel"
+msgstr "Pozice na panelu"
+
+#: prefs.js:55
+msgid "Show Icon on Panel"
+msgstr "Zobrazit ikonu na panelu"
+
+#: prefs.js:58
+msgid "Show Fan Speed"
+msgstr "Zobrazit otáčky ventilátoru"
+
+#: prefs.js:61
+msgid "Show Power Supply Voltage"
+msgstr "Zobrazit Napětí napájecího zdroje"
+
+#: prefs.js:64
+msgid "Group Temperature Items"
+msgstr "Seskupit položky teploty"
+
+#: prefs.js:65
+msgid "Works if you have more than three temperature sensors"
+msgstr "Funguje, pokud máte více než tři teplotní senzory"
+
+#: prefs.js:68
+msgid "Group Voltage Items"
+msgstr "Seskupit položky napětí"
+
+#: prefs.js:69
+msgid "Works if you have more than three voltage sensors"
+msgstr "Funguje, pokud máte více než tři čidla napětí"
+
+#: prefs.js:74
+msgid "HDD/SSD Temperature Utility"
+msgstr "Nástroj pro měření teploty HDD/SSD"
+
+#: prefs.js:79
+msgid "None"
+msgstr "Žádný"
+
+#: prefs.js:80
+msgid "NVIDIA"
+msgstr "NVIDIA"
+
+#: prefs.js:81
+msgid "Catalyst"
+msgstr "Catalyst"
+
+#: prefs.js:84
+msgid "Video Card Temperature Utility"
+msgstr "Nástroj pro měření teploty grafické karty"
+
+#: prefs.js:49
+msgid "Left"
+msgstr "Vlevo"
+
+#: prefs.js:49
+msgid "Center"
+msgstr "Uprostřed"
+
+#: prefs.js:49
+msgid "Right"
+msgstr "Vpravo"
+
+#: extension.js:479
+msgid "Go to the Freon wiki"
+msgstr "Přejít na wiki Freon"
+
+#: extension.js:486
+msgid "Sensor Settings"
+msgstr "Nastavení senzoru"
