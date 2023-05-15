@@ -24,6 +24,7 @@ const Udisks2Util = Me.imports.udisks2.UDisks2;
 const HddtempUtil = Me.imports.hddtempUtil.HddtempUtil;
 const SmartctlUtil = Me.imports.smartctlUtil.SmartctlUtil;
 const NvmecliUtil = Me.imports.nvmecliUtil.NvmecliUtil;
+const MemoryUtil = Me.imports.memoryUtil.MemoryUtil;
 
 const FreonItem = Me.imports.freonItem.FreonItem;
 
@@ -83,19 +84,21 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._initHddtempUtility();
         this._initSmartctlUtility();
         this._initNvmecliUtility();
+        this._initMemoryUtility();
 
         let temperatureIcon = Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-temperature-symbolic.svg');
         let voltageIcon = Gio.icon_new_for_string(Me.path + '/icons/freon-voltage-symbolic.svg');
 
         this._sensorIcons = {
-            'temperature' : temperatureIcon,
-            'temperature-average' : temperatureIcon,
-            'temperature-maximum' : temperatureIcon,
-            'gpu-temperature' : Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-gpu-temperature-symbolic.svg'),
-            'drive-temperature' : Gio.icon_new_for_string('drive-harddisk-symbolic'),
-            'voltage' : voltageIcon,
-            'fan' : Gio.icon_new_for_string(Me.path + '/icons/freon-fan-symbolic.svg'),
-            'power' : voltageIcon,
+            'temperature': temperatureIcon,
+            'temperature-average': temperatureIcon,
+            'temperature-maximum': temperatureIcon,
+            'gpu-temperature': Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-gpu-temperature-symbolic.svg'),
+            'drive-temperature': Gio.icon_new_for_string('drive-harddisk-symbolic'),
+            'voltage': voltageIcon,
+            'fan': Gio.icon_new_for_string(Me.path + '/icons/freon-fan-symbolic.svg'),
+            'power': voltageIcon,
+            'memory': Gio.icon_new_for_string(Me.path + '/icons/freon-memory-symbolic.svg')
         }
 
         this._menuLayout = new St.BoxLayout();
@@ -414,6 +417,10 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             this._utils.nvmecli = new NvmecliUtil();
     }
 
+    _initMemoryUtility() {
+        this._utils.memory = new MemoryUtil();
+    }
+
     _destroyNvmecliUtility() {
         if (this._utils.nvmecli) {
             this._utils.nvmecli.destroy();
@@ -526,6 +533,8 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         let voltageInfo = [];
         let powerInfo = [];
 
+        let memoryInfo = [];
+
         if (this._utils.sensors && this._utils.sensors.available) {
             if (this._settings.get_boolean('show-temperature')) {
                 sensorsTempInfo = sensorsTempInfo.concat(this._utils.sensors.temp);
@@ -587,6 +596,9 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             if (this._settings.get_boolean('show-temperature'))
                 driveTempInfo = driveTempInfo.concat(this._utils.nvmecli.temp);
 
+        if (this._utils.memory && this._utils.memory.available)
+            memoryInfo = this._utils.memory.sensors;
+        
         sensorsTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
         driveTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
         fanInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
@@ -728,6 +740,28 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
                     value: _("%s%.2f%s").format(((power.power >= 0) ? '+' : ''),
                     power.power, unit)});
             }
+            
+
+            if (memoryInfo.length > 0) {
+                sensors.push({type: 'separator'});
+            }
+
+            for (let memory of memoryInfo) {
+                let value = null;
+
+                if (memory.type == 'size') {
+                    value = this._formatSize(memory.value);
+                } else if (memory.type == 'percent') {
+                    value = this._formatPercent(memory.value);
+                }
+
+                sensors.push({
+                    icon: 'memory',
+                    type: 'memory',
+                    label: memory.label,
+                    value: value
+                });
+            }
 
             this._fixNames(sensors);
 
@@ -824,6 +858,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         let temperatureGroup = null;
         let rotationrateGroup = null;
         let voltageGroup = null;
+        let memoryGroup = null;
 
         for (let s of sensors){
             if(s.type == 'separator') {
@@ -932,6 +967,14 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
                     }
 
                     voltageGroup.menu.addMenuItem(item);
+                } else if (s.type == 'memory') {
+                    if (!memoryGroup) {
+                        memoryGroup = new PopupMenu.PopupSubMenuMenuItem(_('Memory'), true);
+                        memoryGroup.icon.gicon = this._sensorIcons['memory'];
+                        this.menu.addMenuItem(memoryGroup);
+                    }
+
+                    memoryGroup.menu.addMenuItem(item);
                 } else {
                     this.menu.addMenuItem(item);
                 }
@@ -951,9 +994,9 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         if (this._settings.get_string('unit')=='fahrenheit'){
             value = this._toFahrenheit(value);
         }
-        let format = '%.1f';
-        if (!this._settings.get_boolean('show-decimal-value')){
-            format = '%.0f';
+        let format = '%.0f';
+        if (this._settings.get_boolean('show-decimal-value')){
+            format = '%.1f';
         }
         format += '%s';
 
@@ -962,6 +1005,46 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         } else {
             return format.format(value, "");
         }
+    }
+
+    _formatPercent(value) {
+        if (value === null) return 'N/A';
+
+        let format = '%.0f';
+        if (this._settings.get_boolean('show-decimal-value')){
+            format = '%.1f';
+        }
+        format += '%s';
+
+        return format.format(value, "%");
+    }
+
+    _formatSize(value) {
+        if (value === null) return 'N/A';
+
+        let format = '%.0f';
+        if (this._settings.get_boolean('show-decimal-value')){
+            format = '%.1f';
+        }
+        format += ' %s';
+
+        let unit = null;
+        if (value >= 1024 * 1024) {
+            value /= 1024 * 1024;
+            unit = "GB";
+        }
+        else if (value >= 1024) {
+            value /= 1024;
+            unit = "MB";
+        }
+        else if (value > 1) {
+            unit = "KB"; 
+        }
+        else {
+            unit = "B";
+        }
+
+        return format.format(value, unit);
     }
 
     get positionInPanel(){
