@@ -125,11 +125,13 @@ var NvidiaUtil = class {
                 try {
                     let [, stdout, stderr] = proc.communicate_utf8_finish(result);
                     const processes = stdout ? stdout.trim().split('\n').slice(2) : [];
-                    resolve(processes.length === 0 || (processes.length === 1 && (
-                        processes[0].endsWith('gnome-shell') ||
-                        processes[0].endsWith('Xorg') ||
-                        processes[0].endsWith('X')
-                    )));
+                    if (processes.length === 1) {
+                        const process = processes[0].toLowerCase().split(' ').pop().replace(/-?server/, '');
+                        resolve(process === 'xorg' || process === 'x' || process === 'x11' || // X11
+                            process === 'gnome-shell'); // Wayland
+                    } else {
+                        resolve(processes.length === 0);
+                    }
                 } catch (e) {
                     reject(e);
                 }
