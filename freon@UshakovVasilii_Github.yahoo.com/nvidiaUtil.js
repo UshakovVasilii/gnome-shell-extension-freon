@@ -5,16 +5,13 @@ const Gio = imports.gi.Gio;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const CommandLineUtil = Me.imports.commandLineUtil;
 
-var NvidiaUtil = class extends CommandLineUtil.CommandLineUtil {
+var NvidiaUtil = class {
 
     constructor() {
-        super();
-        let path = GLib.find_program_in_path('nvidia-smi');
-        this._argv = path ? [
-            '/bin/sh',
-            '-c',
-            `${path} --query-gpu=name,temperature.gpu --format=csv,noheader`
-        ] : null;
+        this._nvidiaSmiPath = GLib.find_program_in_path('nvidia-smi');
+        this._updated = false;
+        this._gpuInfo = {};
+        this._output = [];
     }
 
     async execute(callback) {
@@ -57,7 +54,7 @@ var NvidiaUtil = class extends CommandLineUtil.CommandLineUtil {
             }
     
             // For each GPU...
-            let gpusToPoll = ''
+            let gpuInfo = {};
             for (const gpu of gpus) {
                 // ...read /proc/driver/nvidia/gpus/<ID>/power and check if it supports sleep.
                 const file = Gio.File.new_for_path(`/proc/driver/nvidia/gpus/${gpu}/power`);
@@ -74,19 +71,88 @@ var NvidiaUtil = class extends CommandLineUtil.CommandLineUtil {
                 // If the GPU is sleeping, don't poll it.
                 const decoder = new TextDecoder('utf-8');
                 const contentsString = decoder.decode(contents);
-                if (!contentsString.split('\n')[1].endsWith('Off')) {
-                    gpusToPoll += `${gpu} `
+                const prevGpuInfo = this._gpuInfo[gpu] || {};
+                if (contentsString.split('\n')[1].endsWith('Off')) {
+                    // If you want the GPU to keep showing, add `&& prevGpuInfo.output` above, then uncomment:
+                    // gpuInfo[gpu] = { output: prevGpuInfo.output };
+                    continue;
+                }
+
+                // If the GPU needs time to sleep, then keep showing the old temperature.
+                // Since even process monitoring prevents sleep, we don't check && sleepEligible :/
+                if ((prevGpuInfo.skipUntil || 0) > Date.now()) {
+                    // If you want the GPU to be removed from the menu during this wait time, uncomment:
+                    // gpuInfo[gpu] = { skipUntil: prevGpuInfo.skipUntil };
+                    gpuInfo[gpu] = prevGpuInfo;
+                    continue;
+                }
+                
+                // Poll the GPU.
+                gpuInfo[gpu] = { output: await this.getGpuInfo(gpu) };
+                
+                // If runtime D3 is enabled and the GPU is eligible to sleep...
+                try {
+                    const sleepEligible = await this.isGpuEligibleToSleep(gpu);
+                    if (contentsString.split('\n')[0].includes('Enabled') && sleepEligible) {
+                        // ...skip polling it for 30 seconds.
+                        gpuInfo[gpu].skipUntil = Date.now() + 30000;
+                    }
+                } catch (e) {
+                    console.error(e);
                 }
             }
-    
-            // Set the argv to poll awake GPUs only.
-            let path = GLib.find_program_in_path('nvidia-smi');
-            this._argv[2] = `for id in ${gpusToPoll} ; do ${path} ` +
-                '--query-gpu=name,temperature.gpu,display_mode --format=csv,noheader --id=$id ; done';
-            super.execute(callback);
+            this._gpuInfo = gpuInfo;
+            this._output = Object.keys(this._gpuInfo)
+                .sort()
+                .map(gpu => gpuInfo[gpu].output)
+                .filter(output => !!output);
         } catch (e) {
             console.error(e);
+        } finally {
+            callback();
+            this._updated = true;
         }
+    }
+
+    isGpuEligibleToSleep(id) {
+        return new Promise((resolve, reject) => {
+            let proc = Gio.Subprocess.new(
+                [this._nvidiaSmiPath, 'pmon', '--count=1', `--id=${id}`],
+                Gio.SubprocessFlags.STDOUT_PIPE |
+                Gio.SubprocessFlags.STDERR_PIPE);
+
+            proc.communicate_utf8_async(null, null, (proc, result) => {
+                try {
+                    let [, stdout, stderr] = proc.communicate_utf8_finish(result);
+                    const processes = stdout ? stdout.trim().split('\n').slice(2) : [];
+                    resolve(processes.length === 0 || (processes.length === 1 && (
+                        processes[0].endsWith('gnome-shell') ||
+                        processes[0].endsWith('Xorg') ||
+                        processes[0].endsWith('X')
+                    )));
+                } catch (e) {
+                    reject(e);
+                }
+            });
+        });
+    }
+
+    getGpuInfo(id) {
+        return new Promise((resolve, reject) => {
+            let proc = Gio.Subprocess.new(
+                [this._nvidiaSmiPath, '--query-gpu=name,temperature.gpu', '--format=csv,noheader', `--id=${id}`],
+                Gio.SubprocessFlags.STDOUT_PIPE |
+                Gio.SubprocessFlags.STDERR_PIPE);
+
+            proc.communicate_utf8_async(null, null, (proc, result) => {
+                try {
+                    let [, stdout, stderr] = proc.communicate_utf8_finish(result);
+                    resolve(stdout ? stdout.trim() : '');
+                } catch (e) {
+                    reject(e);
+                }
+            });
+        });
     }
 
     get temp() {
@@ -111,4 +177,19 @@ var NvidiaUtil = class extends CommandLineUtil.CommandLineUtil {
         return gpus;
     }
 
+    get available() {
+        return !!this._nvidiaSmiPath;
+    }
+
+    get updated() {
+        return this._updated;
+    }
+
+    set updated(updated) {
+        this._updated = updated;
+    }
+
+    destroy(callback) {
+        this._gpuInfo = {};
+    }
 };
