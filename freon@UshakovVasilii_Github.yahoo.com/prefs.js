@@ -162,6 +162,9 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
         this._addSwitch({key : 'show-power', y : i++, x : j,
             label : _('Power')});
 
+        this._addSwitch({key : 'show-memory', y : i++, x : j,
+            label : _('Memory')});
+
         this._addLabel({
             label: _('Group Items'),
             y : i++, x : j

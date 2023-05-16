@@ -159,6 +159,12 @@
       <description>Display voltage of various components</description>
     </key>
 
+    <key type="b" name="show-memory">
+      <default>true</default>
+      <summary>Display memory</summary>
+      <description>Display memory info</description>
+    </key>
+
     <key type="b" name="group-temperature">
       <default>true</default>
       <summary>Group temperature menu items</summary>

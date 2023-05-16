@@ -154,6 +154,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._addSettingChangedSignal('show-rotationrate', this._rerender.bind(this));
         this._addSettingChangedSignal('show-voltage', this._rerender.bind(this));
         this._addSettingChangedSignal('show-power', this._rerender.bind(this));
+        this._addSettingChangedSignal('show-memory', this._rerender.bind(this));
 
         this._addSettingChangedSignal('group-temperature', this._rerender.bind(this))
         this._addSettingChangedSignal('group-rotationrate', this._rerender.bind(this))
@@ -597,7 +598,8 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
                 driveTempInfo = driveTempInfo.concat(this._utils.nvmecli.temp);
 
         if (this._utils.memory && this._utils.memory.available)
-            memoryInfo = this._utils.memory.sensors;
+            if (this._settings.get_boolean('show-memory'))
+                memoryInfo = this._utils.memory.sensors;
         
         sensorsTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
         driveTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
