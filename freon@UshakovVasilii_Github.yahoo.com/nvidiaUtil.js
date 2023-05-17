@@ -72,17 +72,14 @@ var NvidiaUtil = class {
                 const decoder = new TextDecoder('utf-8');
                 const contentsString = decoder.decode(contents);
                 const prevGpuInfo = this._gpuInfo[gpu] || {};
-                if (contentsString.split('\n')[1].endsWith('Off')) {
-                    // If you want the GPU to keep showing, add `&& prevGpuInfo.output` above, then uncomment:
-                    // gpuInfo[gpu] = { output: prevGpuInfo.output };
+                if (contentsString.split('\n')[1].endsWith('Off') && prevGpuInfo.output) {
+                    gpuInfo[gpu] = { output: prevGpuInfo.output.split(',')[0] + ',N/A' };
                     continue;
                 }
 
                 // If the GPU needs time to sleep, then keep showing the old temperature.
                 // Since even process monitoring prevents sleep, we don't check && sleepEligible :/
                 if ((prevGpuInfo.skipUntil || 0) > Date.now()) {
-                    // If you want the GPU to be removed from the menu during this wait time, uncomment:
-                    // gpuInfo[gpu] = { skipUntil: prevGpuInfo.skipUntil };
                     gpuInfo[gpu] = prevGpuInfo;
                     continue;
                 }
@@ -167,9 +164,9 @@ var NvidiaUtil = class {
                     continue;
 
                 let label = values[0].trim();
-                let temp = parseFloat(values[1]);
+                let temp = values[1] === 'N/A' ? null : parseFloat(values[1]);
 
-                if(!label || !temp)
+                if(!label || isNaN(temp))
                     continue;
 
                 gpus.push({ label: label, temp: temp });
@@ -193,5 +190,6 @@ var NvidiaUtil = class {
 
     destroy(callback) {
         this._gpuInfo = {};
+        this._output = [];
     }
 };
