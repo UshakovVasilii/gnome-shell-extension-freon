@@ -2,45 +2,46 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Freon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-06 17:05-0300\n"
-"PO-Revision-Date: 2020-10-29 16:21+0300\n"
+"POT-Creation-Date: 2023-05-28 08:38+0300\n"
+"PO-Revision-Date: 2023-05-28 08:48+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
-"Last-Translator: Muha Aliss <muhaaliss@pm.me>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: tr\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: aticonfigUtil.js\n"
+"X-Poedit-SearchPath-1: bumblebeeNvidiaUtil.js\n"
+"X-Poedit-SearchPath-2: commandLineUtil.js\n"
+"X-Poedit-SearchPath-3: extension.js\n"
+"X-Poedit-SearchPath-4: freeipmiUtil.js\n"
+"X-Poedit-SearchPath-5: freonItem.js\n"
+"X-Poedit-SearchPath-6: hddtempUtil.js\n"
+"X-Poedit-SearchPath-7: liquidctlUtil.js\n"
+"X-Poedit-SearchPath-8: metadata.json\n"
+"X-Poedit-SearchPath-9: nvidiaUtil.js\n"
+"X-Poedit-SearchPath-10: nvmecliUtil.js\n"
+"X-Poedit-SearchPath-11: prefs.js\n"
+"X-Poedit-SearchPath-12: sensorsUtil.js\n"
+"X-Poedit-SearchPath-13: smartctlUtil.js\n"
+"X-Poedit-SearchPath-14: stylesheet.css\n"
+"X-Poedit-SearchPath-15: udisks2.js\n"
+"X-Poedit-SearchPath-16: schemas/org.gnome.shell.extensions.sensors.gschema."
+"xml\n"
 
-#: bumblebeeNvidiaUtil.js:75 prefs.js:82
+#: bumblebeeNvidiaUtil.js:79
 msgid "Bumblebee + NVIDIA"
 msgstr "Bumblebee + NVIDIA"
 
-#: extension.js:319
-msgid "Average"
-msgstr "Ortalama"
-
-#: extension.js:320
-msgid "Maximum"
-msgstr "Maksimum"
-
-#: extension.js:341
-#, javascript-format
-msgid "%drpm"
-msgstr "%drpm"
-
-#: extension.js:350
-#, javascript-format
-msgid "%s%.2fV"
-msgstr "%s%.2fV"
-
-#: extension.js:396
+#: extension.js:606
 msgid "Please run sensors-detect as root."
-msgstr "Lütfen sensör-algılamayı yönetici olarak çalıştırın."
+msgstr "Lütfen sensors-detect programını yönetici olarak çalıştırın."
 
-#: extension.js:397
+#: extension.js:607
 msgid ""
 "Please install lm_sensors.\n"
 "If this doesn't help, click here to report with your sensors output!"
@@ -48,102 +49,398 @@ msgstr ""
 "Lütfen lm_sensors yükleyin.\n"
 "Bu işe yaramazsa, sensör çıktılarınızla raporlamak için burayı tıklayın!"
 
-#: extension.js:488
-msgid "Temperature Sensors"
-msgstr "Sıcaklık sensörleri"
+#: extension.js:674
+msgid "Average"
+msgstr "Ortalama"
 
-#: extension.js:495
+#: extension.js:681
+msgid "Maximum"
+msgstr "En Yüksek"
+
+#: extension.js:697
+msgid " rpm"
+msgstr " rpm"
+
+#: extension.js:703
+#, javascript-format
+msgid "%d%s"
+msgstr "%d%s"
+
+#: extension.js:711
+msgid "V"
+msgstr "V"
+
+#: extension.js:717 extension.js:728
+#, javascript-format
+msgid "%s%.2f%s"
+msgstr "%s%.2f%s"
+
+#: extension.js:722
+msgid "W"
+msgstr "W"
+
+#: extension.js:779
+msgid "Go to the Freon wiki"
+msgstr "Freon Wikiʼye Git"
+
+#: extension.js:787
+msgid "Sensor Settings"
+msgstr "Sensör Ayarları"
+
+#: extension.js:904 prefs.js:154 prefs.js:171
+msgid "Temperature"
+msgstr "Sıcaklık"
+
+#: extension.js:921 prefs.js:157 prefs.js:175
+msgid "Rotation Rate"
+msgstr "Dönme Hızı"
+
+#: extension.js:929 prefs.js:160 prefs.js:179
 msgid "Voltage"
 msgstr "Voltaj"
 
-#: extension.js:509
-msgid "Sensors Settings"
-msgstr "Sensör ayarları"
+#: prefs.js:32
+msgid "Display Options"
+msgstr "Görünüm Seçenekleri"
 
-#: prefs.js:33
+#: prefs.js:37
 msgid "Poll Sensors Every (sec)"
-msgstr ""
+msgstr "Sensörleri Yoklama Sıklığı (sn)"
 
-#: prefs.js:39
-msgid "Show Decimal Value"
-msgstr "Ondalık değeri göster"
+#: prefs.js:46
+msgid "Position on Panel"
+msgstr "Paneldeki Konumu"
 
-#: prefs.js:40
-msgid "Show one digit after decimal"
-msgstr "Ondalıktan sonra bir rakam göster"
-
-#: prefs.js:45
-msgid "Temperature Unit"
-msgstr "Sıcaklık birimi"
-
-#: prefs.js:51
-msgid "Position in Panel"
-msgstr "Paneldeki konum"
-
-#: prefs.js:55
-msgid "Show Icon on Panel"
-msgstr "Panelde simgeyi göster"
-
-#: prefs.js:58
-msgid "Show Fan Speed"
-msgstr "Fan hızını göster"
-
-#: prefs.js:61
-msgid "Show Power Supply Voltage"
-msgstr "Güç kaynağı voltajını göster"
-
-#: prefs.js:64
-msgid "Group Temperature Items"
-msgstr "Sıcaklık grubu öğeleri"
-
-#: prefs.js:65
-msgid "Works if you have more than three temperature sensors"
-msgstr "Üçten fazla sıcaklık sensörünüz varsa çalışır"
-
-#: prefs.js:68
-msgid "Group Voltage Items"
-msgstr "Voltaj grubu öğeleri"
-
-#: prefs.js:69
-msgid "Works if you have more than three voltage sensors"
-msgstr "Üçten fazla voltaj sensörünüz varsa çalışır"
-
-#: prefs.js:74
-msgid "HDD/SSD Temperature Utility"
-msgstr "HDD/SSD sıcaklık yardımcısı"
-
-#: prefs.js:79
-msgid "None"
-msgstr "Yok"
-
-#: prefs.js:80
-msgid "NVIDIA"
-msgstr "NVIDIA"
-
-#: prefs.js:81
-msgid "Catalyst"
-msgstr "Catalyst"
-
-#: prefs.js:84
-msgid "Video Card Temperature Utility"
-msgstr "Ekran kartı sıcaklık yardımcısı"
-
-#: prefs.js:49
+#: prefs.js:47
 msgid "Left"
 msgstr "Sol"
 
-#: prefs.js:49
+#: prefs.js:47
 msgid "Center"
 msgstr "Orta"
 
-#: prefs.js:49
+#: prefs.js:47
 msgid "Right"
 msgstr "Sağ"
 
-#: extension.js:479
-msgid "Go to the Freon wiki"
-msgstr "Freon wiki'ye git"
+#: prefs.js:52
+msgid "Index on Panel"
+msgstr "Paneldeki Sırası"
 
-#: extension.js:486
-msgid "Sensor Settings"
-msgstr "Sensör ayarları"
+#: prefs.js:61 schemas/org.gnome.shell.extensions.sensors.gschema.xml:32
+msgid "Show Icon on Panel"
+msgstr "Panelde Simgeyi Göster"
+
+#: prefs.js:64
+msgid "Temperature Unit"
+msgstr "Sıcaklık Birimi"
+
+#: prefs.js:65
+msgid "°C"
+msgstr "°C"
+
+#: prefs.js:65
+msgid "°F"
+msgstr "°F"
+
+#: prefs.js:70
+msgid "Show Temperature Unit"
+msgstr "Sıcaklık Birimini Göster"
+
+#: prefs.js:73
+msgid "Show Rotation Rate Unit"
+msgstr "Dönme Hızı Birimini Göster"
+
+#: prefs.js:76
+msgid "Show Voltage Unit"
+msgstr "Voltaj Birimini Göster"
+
+#: prefs.js:79
+msgid "Show Power Unit"
+msgstr "Güç Birimini Göster"
+
+#: prefs.js:82
+msgid "Show Decimal Values"
+msgstr "Ondalık Değerleri Göster"
+
+#: prefs.js:83
+msgid "Show additionnal digits after decimal point"
+msgstr "Ondalık noktadan sonra ek basamakları göster"
+
+#: prefs.js:89
+msgid "Generic Sensor Providers"
+msgstr "Genel Sensör Sağlayıcılar"
+
+#: prefs.js:95 schemas/org.gnome.shell.extensions.sensors.gschema.xml:86
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:87
+msgid "Read sensors from lm-sensors"
+msgstr "Sensörleri lm-sensors programından oku"
+
+#: prefs.js:99 schemas/org.gnome.shell.extensions.sensors.gschema.xml:92
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:93
+msgid "Read sensors using ipmi-sensors from FreeIPMI"
+msgstr "Sensörleri ipmi-sensors kullanarak FreeIPMI programından oku"
+
+#: prefs.js:103
+msgid "Direct"
+msgstr "Doğrudan"
+
+#: prefs.js:111
+msgid "Read sensors from liquidctl (requires v1.7.0 or later)"
+msgstr ""
+"Sensörleri liquidctl programından oku (v1.7.0 ya da daha sonrasını "
+"gerektirir)"
+
+#: prefs.js:114
+msgid "GPU Sensor Providers"
+msgstr "Ekran Kartı Sensör Sağlayıcılar"
+
+#: prefs.js:128
+msgid "Drive Sensor Providers"
+msgstr "Sürücü Sensör Sağlayıcılar"
+
+#: prefs.js:140
+msgid "Read drive sensors using smartctl from smartmontools"
+msgstr "Sürücü sensörlerini smartctl kullanarak smartmontools programından oku"
+
+#: prefs.js:149
+msgid "Show Sensors"
+msgstr "Sensörleri Göster"
+
+#: prefs.js:163
+msgid "Power"
+msgstr "Güç"
+
+#: prefs.js:166
+msgid "Group Items"
+msgstr "Ögeleri Grupla"
+
+#: prefs.js:172 schemas/org.gnome.shell.extensions.sensors.gschema.xml:165
+msgid "Group three or more temperature sensors"
+msgstr "Üçten fazla sıcaklık sensörü varsa grupla"
+
+#: prefs.js:176
+msgid "Group three or more rotation rate sensors"
+msgstr "Üçten fazla dönme hızı varsa grupla"
+
+#: prefs.js:180 schemas/org.gnome.shell.extensions.sensors.gschema.xml:177
+msgid "Group three or more voltage sensors"
+msgstr "Üçten fazla voltaj sensörü varsa grupla"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:8
+msgid "Sensors to show in panel"
+msgstr "Panelde gösterilecek sensörler"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:9
+msgid "Select the sensord whose values has to be shown in the panel"
+msgstr "Değerleri panelde gösterilecek sensör art alan hizmetini seçin"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:14
+msgid "Seconds before next update"
+msgstr "Sonraki güncellemeden önceki saniye"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:15
+msgid ""
+"This is the seconds after CPU temperature extension updates the data from "
+"the system"
+msgstr ""
+"Bu, işlemci sıcaklık uzantısının sistemden verileri güncellemesinden sonraki "
+"saniyedir."
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:20
+msgid "Position in Panel"
+msgstr "Paneldeki Konumu"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:21
+msgid "Position in Panel ('left', 'center', 'right')"
+msgstr "Paneldeki konumu ('left', 'center', 'right') yani sol, orta veya sağ"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:26
+msgid "Index in panel box"
+msgstr "Panel kutusundaki sırası"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:27
+msgid ""
+"Index within the selected panel box (0: first, 1: second, ..., -1: last)"
+msgstr "Seçilen panel kutusundaki konumu (0: birinci, 1: ikinci, ..., -1: son)"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:33
+msgid "Show sensor icon on top panel"
+msgstr "Sensör simgesini panelde göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:38
+msgid "Display Temperature"
+msgstr "Sıcaklığı Görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:39
+msgid "Display temperature"
+msgstr "Sıcaklığı görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:44
+msgid "Unit"
+msgstr "Birim"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:45
+msgid ""
+"The unit ('centigrade' or 'fahrenheit') the extension should display the "
+"temperature in"
+msgstr ""
+"Uzantının sıcaklığı göstermesi gereken birim ('centigrade' veya 'fahrenheit')"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:50
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:51
+msgid "Show degrees celsius/fahrenheit on Panel"
+msgstr "Panelde santigrat/fahrenhayt derecelerini göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:56
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:57
+msgid "Show RPM on Panel"
+msgstr "Panelde RPM Göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:62
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:63
+msgid "Show volts on Panel"
+msgstr "Panelde Volts Göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:68
+msgid "Display Power"
+msgstr "Gücü Görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:69
+msgid "Display power"
+msgstr "Gücü görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:74
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:75
+msgid "Show Watts on Panel"
+msgstr "Panelde Watts Göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:80
+msgid "Show decimal value"
+msgstr "Ondalık değeri göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:81
+msgid "Show one digit after decimal"
+msgstr "Ondalıktan sonra bir rakam göster"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:98
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:99
+msgid "Method to run FreeIPMI utility"
+msgstr "FreeIPMI yardımcısını çalıştırma yöntemi"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:104
+msgid "Read sensors from liquidctl"
+msgstr "Sensörleri liquidctl programından oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:105
+msgid "Read sensors from (requires liquidctl v1.7.0 or later)"
+msgstr "Sensörleri şu programdan oku (v1.7.0 ya da daha sonrasını gerektirir)"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:110
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:111
+msgid "Read GPU sensors from NVIDIA driver"
+msgstr "Ekran kartı sensörlerini NVIDIA sürücüsünden oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:116
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:117
+msgid "Read GPU sensors from Bumblebee + NVIDIA driver"
+msgstr "Ekran kartı sensörlerini Bumblebee + NVIDIA sürücünden oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:122
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:123
+msgid "Read GPU sensors from Catalyst driver"
+msgstr "Ekran kartı sensörlerini Catalyst sürücüsünden oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:128
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:129
+msgid "Read drive sensors from Udisks2"
+msgstr "Sürücü sensörlerini Udisks2 programından oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:134
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:135
+msgid "Read drive sensors using Hddtemp"
+msgstr "Sürücü sensörlerini Hddtemp kullanarak oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:140
+msgid "Read drive sensors using smartctl"
+msgstr "Sürücü sensörlerini smartctl kullanarak oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:141
+msgid "Read drive sensors using smartctl from smartmontool"
+msgstr "Sürücü sensörlerini smartctl kullanarak smartmontools programından oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:146
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:147
+msgid "Read drive sensors using nvme-cli"
+msgstr "Sürücü sensörlerini nvme-cli kullanarak oku"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:152
+msgid "Display rotationrate"
+msgstr "Dönme hızını görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:153
+msgid "Display rotation rate (per minute)"
+msgstr "Dönme hızını görüntüle (dakikada) "
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:158
+msgid "Display voltage"
+msgstr "Voltajı görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:159
+msgid "Display voltage of various components"
+msgstr "Çeşitli bileşenlerin voltajlarını görüntüle"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:164
+msgid "Group temperature menu items"
+msgstr "Sıcaklık menü ögelerini grupla"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:170
+msgid "Group Fan speed menu items"
+msgstr "Fan hızı menü ögelerini grupla"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:171
+msgid "Group three or more fan sensors"
+msgstr "Üçten fazla fan sensörü varsa grupla"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:176
+msgid "Group voltage menu items"
+msgstr "Voltaj menü ögelerini grupla"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:182
+msgid "Enable debug logging"
+msgstr "Hata ayıklama günlüklemesini etkinleştir"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:183
+msgid "Enable debug logging from the extension"
+msgstr "Eklentiden hata ayıklama günlüklemesini etkinleştir"
+
+#~ msgid "Read drive sensors from smartctl from smartmontools"
+#~ msgstr "drive sensörlerini smartctl kullanarak smartmontools ile oku"
+
+#, javascript-format
+#~ msgid "%drpm"
+#~ msgstr "%drpm"
+
+#~ msgid "Temperature Sensors"
+#~ msgstr "Sıcaklık Sensörleri"
+
+#~ msgid "Sensors Settings"
+#~ msgstr "Sensör Ayarları"
+
+#~ msgid "Show Fan Speed"
+#~ msgstr "Fan Hızını Göster"
+
+#~ msgid "HDD/SSD Temperature Utility"
+#~ msgstr "HDD/SSD Sıcaklık Yardımcısı"
+
+#~ msgid "None"
+#~ msgstr "Yok"
+
+#~ msgid "NVIDIA"
+#~ msgstr "NVIDIA"
+
+#~ msgid "Catalyst"
+#~ msgstr "Catalyst"
+
+#~ msgid "Video Card Temperature Utility"
+#~ msgstr "Ekran Kartı Sıcaklık Yardımcısı"
