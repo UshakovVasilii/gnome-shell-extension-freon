@@ -137,7 +137,7 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
 
         this._addSwitch({key : 'use-drive-smartctl', y : i++, x : j,
             label : 'smartctl',
-            help : _('Read drive sensors from smartctl from smartmontools')});
+            help : _('Read drive sensors using smartctl from smartmontools')});
 
         this._addSwitch({key : 'use-drive-nvmecli', y : i++, x : j,
             label : 'nvme-cli'});
