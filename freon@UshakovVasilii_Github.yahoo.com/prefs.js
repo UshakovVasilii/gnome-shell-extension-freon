@@ -61,7 +61,7 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
             label : _('Show Icon on Panel')});
 
         this._addComboBox({
-            label: 'Temperature Unit',
+            label: _('Temperature Unit'),
             items : {centigrade : _("\u00b0C"), fahrenheit : _("\u00b0F")},
             key: 'unit', y : i++, x : j
         });
@@ -100,7 +100,7 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
 
         this._addComboBox({
             items : {
-                'direct' : 'Direct',
+                'direct' : _('Direct'),
                 'sudo' : 'sudo' },
             key: 'exec-method-freeipmi', y : i++, x : j + 1,
             label: ''
