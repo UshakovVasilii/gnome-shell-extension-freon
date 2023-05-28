@@ -12,7 +12,7 @@
     <key type="i" name="update-time">
       <default>5</default>
       <summary>Seconds before next update</summary>
-      <description>This is the seconds after CPU temperature extension updates the data from the syetem</description>
+      <description>This is the seconds after CPU temperature extension updates the data from the system</description>
     </key>
 
     <key type="s" name="position-in-panel">
@@ -107,14 +107,14 @@
 
     <key type="b" name="use-gpu-nvidia">
       <default>false</default>
-      <summary>Read GPU sensors from NVidia driver</summary>
-      <description>Read GPU sensors from NVidia driver</description>
+      <summary>Read GPU sensors from NVIDIA driver</summary>
+      <description>Read GPU sensors from NVIDIA driver</description>
     </key>
 
     <key type="b" name="use-gpu-bumblebeenvidia">
       <default>false</default>
-      <summary>Read GPU sensors from Bumblebee + NVidia driver</summary>
-      <description>Read GPU sensors from Bumblebee + NVidia driver</description>
+      <summary>Read GPU sensors from Bumblebee + NVIDIA driver</summary>
+      <description>Read GPU sensors from Bumblebee + NVIDIA driver</description>
     </key>
 
     <key type="b" name="use-gpu-aticonfig">
