@@ -587,11 +587,12 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             if (this._settings.get_boolean('show-temperature'))
                 driveTempInfo = driveTempInfo.concat(this._utils.nvmecli.temp);
 
-        sensorsTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
-        driveTempInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
-        fanInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
-        voltageInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
-        powerInfo.sort(function(a,b) { return a.label.localeCompare(b.label) });
+        const comparator = (a, b) => a.label.localeCompare(b.label, undefined, {numeric: true})
+        sensorsTempInfo.sort(comparator);
+        driveTempInfo.sort(comparator);
+        fanInfo.sort(comparator);
+        voltageInfo.sort(comparator);
+        powerInfo.sort(comparator);
 
         let tempInfo = gpuTempInfo.concat(sensorsTempInfo).concat(driveTempInfo);
 
