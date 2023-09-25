@@ -1,10 +1,9 @@
-const GLib = imports.gi.GLib;
-const Gio = imports.gi.Gio;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const CommandLineUtil = Me.imports.commandLineUtil;
+import CommandLineUtil from './commandLineUtil.js';
 
-var BumblebeeNvidiaUtil = class extends CommandLineUtil.CommandLineUtil {
+export default class BumblebeeNvidiaUtil extends CommandLineUtil {
 
     constructor() {
         super();

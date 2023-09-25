@@ -1,11 +1,7 @@
-const ByteArray = imports.byteArray;
-const GLib = imports.gi.GLib;
-const Gio = imports.gi.Gio;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const CommandLineUtil = Me.imports.commandLineUtil;
-
-var NvidiaUtil = class {
+export default class NvidiaUtil {
 
     constructor() {
         this._nvidiaSmiPath = GLib.find_program_in_path('nvidia-smi');

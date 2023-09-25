@@ -1,13 +1,13 @@
-const GLib = imports.gi.GLib;
-
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import GLib from 'gi://GLib';
 const ByteArray = imports.byteArray;
+
 function getSmartData (argv){
     const smartctl = GLib.find_program_in_path('smartctl')
     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
 }
 
-var SmartctlUtil  = class {
+export default class SmartctlUtil {
+
     constructor(callback) {
         this._smartDevices = [];
         try {

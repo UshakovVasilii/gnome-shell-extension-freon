@@ -1,9 +1,8 @@
-const GLib = imports.gi.GLib;
+import GLib from 'gi://GLib';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const CommandLineUtil = Me.imports.commandLineUtil;
+import CommandLineUtil from './commandLineUtil.js';
 
-var AticonfigUtil = class extends CommandLineUtil.CommandLineUtil {
+export default class AticonfigUtil extends CommandLineUtil {
 
     constructor() {
         super();

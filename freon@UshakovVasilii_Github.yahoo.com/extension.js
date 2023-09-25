@@ -1,34 +1,31 @@
-const St = imports.gi.St;
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
-const Main = imports.ui.main;
-const Util = imports.misc.util;
-const Mainloop = imports.mainloop;
-const Clutter = imports.gi.Clutter;
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+const Mainloop = imports.mainloop
+import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as Util from 'resource:///org/gnome/shell/misc/util.js';
 
-const SensorsUtil = Me.imports.sensorsUtil.SensorsUtil;
-const FreeipmiUtil = Me.imports.freeipmiUtil.FreeipmiUtil;
-const LiquidctlUtil = Me.imports.liquidctlUtil.LiquidctlUtil;
+import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-const NvidiaUtil = Me.imports.nvidiaUtil.NvidiaUtil;
-const BumblebeeNvidiaUtil = Me.imports.bumblebeeNvidiaUtil.BumblebeeNvidiaUtil;
-const AticonfigUtil = Me.imports.aticonfigUtil.AtiConfigUtil;
+import SensorsUtil from './sensorsUtil.js';
+import FreeipmiUtil from './freeipmiUtil.js';
+import LiquidctlUtil from './liquidctlUtil.js';
 
-const Udisks2Util = Me.imports.udisks2.UDisks2;
-const HddtempUtil = Me.imports.hddtempUtil.HddtempUtil;
-const SmartctlUtil = Me.imports.smartctlUtil.SmartctlUtil;
-const NvmecliUtil = Me.imports.nvmecliUtil.NvmecliUtil;
+import NvidiaUtil from './nvidiaUtil.js';
+import BumblebeeNvidiaUtil from './bumblebeeNvidiaUtil.js';
+import AticonfigUtil from './aticonfigUtil.js';
 
-const FreonItem = Me.imports.freonItem.FreonItem;
+import Udisks2Util from './udisks2.js';
+import HddtempUtil from './hddtempUtil.js';
+import SmartctlUtil from './smartctlUtil.js';
+import NvmecliUtil from './nvmecliUtil.js';
 
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import FreonItem from './freonItem.js';
 
 function _makeLogFunction(prefix) {
     return msg => {
@@ -55,10 +52,12 @@ function _makeLogFunction(prefix) {
 }
 
 const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extends PanelMenu.Button {
-    _init() {
-        super._init(St.Align.START);
 
-        this._settings = ExtensionUtils.getSettings();
+    constructor(uuid, path, settings) {
+        super(0);
+
+        this._extension_uuid = uuid;
+        this._settings = settings;
 
         var _debugFunc = _makeLogFunction('DEBUG');
         this.debug = this._settings.get_boolean('debug') ? _debugFunc : () => {};
@@ -84,17 +83,17 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._initSmartctlUtility();
         this._initNvmecliUtility();
 
-        let temperatureIcon = Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-temperature-symbolic.svg');
-        let voltageIcon = Gio.icon_new_for_string(Me.path + '/icons/freon-voltage-symbolic.svg');
+        let temperatureIcon = Gio.icon_new_for_string(path + '/icons/material-icons/material-temperature-symbolic.svg');
+        let voltageIcon = Gio.icon_new_for_string(path + '/icons/freon-voltage-symbolic.svg');
 
         this._sensorIcons = {
             'temperature' : temperatureIcon,
             'temperature-average' : temperatureIcon,
             'temperature-maximum' : temperatureIcon,
-            'gpu-temperature' : Gio.icon_new_for_string(Me.path + '/icons/material-icons/material-gpu-temperature-symbolic.svg'),
+            'gpu-temperature' : Gio.icon_new_for_string(path + '/icons/material-icons/material-gpu-temperature-symbolic.svg'),
             'drive-temperature' : Gio.icon_new_for_string('drive-harddisk-symbolic'),
             'voltage' : voltageIcon,
-            'fan' : Gio.icon_new_for_string(Me.path + '/icons/freon-fan-symbolic.svg'),
+            'fan' : Gio.icon_new_for_string(path + '/icons/freon-fan-symbolic.svg'),
             'power' : voltageIcon,
         }
 
@@ -778,7 +777,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
 
         let wiki = new PopupMenu.PopupBaseMenuItem();
         wiki.actor.add_child(new St.Label({ text: _("Go to the Freon wiki"), x_align: Clutter.ActorAlign.START, x_expand: true }));
-        wiki.connect('activate', function () {
+        wiki.connect('activate', () => {
             Util.spawn(["xdg-open", "https://github.com/UshakovVasilii/gnome-shell-extension-freon/wiki"]);
         });
 
@@ -786,8 +785,8 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
 
         let settings = new PopupMenu.PopupBaseMenuItem();
         settings.actor.add_child(new St.Label({ text: _("Sensor Settings"), x_align: Clutter.ActorAlign.START, x_expand: true }));
-        settings.connect('activate', function () {
-            Util.spawn(["gnome-extensions", "prefs", Me.metadata.uuid]);
+        settings.connect('activate', () => {
+            Util.spawn(["gnome-extensions", "prefs", this._extension_uuid]);
         });
 
         this.menu.addMenuItem(settings);
@@ -970,19 +969,16 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
     }
 });
 
-let freonMenu;
+export default class extends Extension {
 
-function init(extensionMeta) {
-    ExtensionUtils.initTranslations();
-}
+    enable() {
+        this._freonMenu = new FreonMenuButton(this.uuid, this.path, this.getSettings());
+        Main.panel.addToStatusArea('freonMenu', this._freonMenu);
+        this._freonMenu._positionInPanelChanged();
+    }
 
-function enable() {
-    freonMenu = new FreonMenuButton();
-    Main.panel.addToStatusArea('freonMenu', freonMenu);
-    freonMenu._positionInPanelChanged();
-}
-
-function disable() {
-    freonMenu.destroy();
-    freonMenu = null;
+    disable() {
+        this._freonMenu?.destroy();
+        this._freonMenu = null;
+    }
 }

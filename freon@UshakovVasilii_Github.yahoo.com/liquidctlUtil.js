@@ -1,11 +1,10 @@
 // Provide sensor data from liquidctl.
+import GLib from 'gi://GLib';
 
-const GLib = imports.gi.GLib;
+import CommandLineUtil from './commandLineUtil.js';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const commandLineUtil = Me.imports.commandLineUtil;
+export default class LiquidctlUtil extends CommandLineUtil {
 
-var LiquidctlUtil = class extends commandLineUtil.CommandLineUtil {
     constructor() {
         super();
         const path = GLib.find_program_in_path('liquidctl');

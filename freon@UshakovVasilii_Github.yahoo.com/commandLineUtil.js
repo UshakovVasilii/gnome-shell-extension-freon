@@ -1,8 +1,6 @@
-const ByteArray = imports.byteArray;
-const GLib = imports.gi.GLib;
-const Gio = imports.gi.Gio;
+import Gio from 'gi://Gio';
 
-var CommandLineUtil = class {
+export default class CommandLineUtil {
 
     constructor(){
         this._argv = null;

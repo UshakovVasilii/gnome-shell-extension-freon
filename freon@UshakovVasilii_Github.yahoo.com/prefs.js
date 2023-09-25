@@ -1,29 +1,22 @@
-const GObject = imports.gi.GObject;
-const Gio = imports.gi.Gio;
-const Gtk = imports.gi.Gtk;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk?version=4.0';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
+import {ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 const modelColumn = {
     label: 0,
     separator: 1
 }
 
-function init() {
-    ExtensionUtils.initTranslations();
-}
-
 var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget extends Gtk.Grid {
 
-    _init() {
-        super._init();
+    constructor(settings) {
+        super();
         this.margin = this.row_spacing = this.column_spacing = 20;
 
-        this._settings = ExtensionUtils.getSettings();
+        this._settings = settings;
 
         let i = 0;
         let j = 0;
@@ -230,6 +223,9 @@ var FreonPrefsWidget = new GObject.registerClass(class Freon_FreonPrefsWidget ex
     }
 });
 
-function buildPrefsWidget() {
-    return new FreonPrefsWidget();
+export default class extends ExtensionPreferences {
+
+    getPreferencesWidget() {
+        return new FreonPrefsWidget(this.getSettings());
+    }
 }

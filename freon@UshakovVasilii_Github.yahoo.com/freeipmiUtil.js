@@ -1,9 +1,9 @@
-const GLib = imports.gi.GLib;
+import GLib from 'gi://GLib';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const CommandLineUtil = Me.imports.commandLineUtil;
+import CommandLineUtil from './commandLineUtil.js';
 
-var FreeipmiUtil = class extends CommandLineUtil.CommandLineUtil {
+export default class FreeipmiUtil extends CommandLineUtil {
+
     constructor() {
         super();
 

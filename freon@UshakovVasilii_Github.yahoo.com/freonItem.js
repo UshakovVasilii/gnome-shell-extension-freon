@@ -1,12 +1,13 @@
-const GObject = imports.gi.GObject;
-const PopupMenu = imports.ui.popupMenu;
-const St = imports.gi.St;
-const Clutter = imports.gi.Clutter;
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
 
-var FreonItem = GObject.registerClass(class FreonItem extends PopupMenu.PopupBaseMenuItem {
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-    _init(gIcon, key, label, value, displayName) {
-        super._init();
+export default GObject.registerClass(class FreonItem extends PopupMenu.PopupBaseMenuItem {
+
+    constructor(gIcon, key, label, value, displayName) {
+        super();
         this._main = false;
         this._key = key;
         this._gIcon = gIcon;

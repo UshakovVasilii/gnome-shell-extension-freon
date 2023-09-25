@@ -1,13 +1,12 @@
-const GLib = imports.gi.GLib;
-
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+import GLib from 'gi://GLib';
 
 function getNvmeData (argv){
     const nvme = GLib.find_program_in_path('nvme')
     return JSON.parse(GLib.spawn_command_line_sync(`${nvme} ${argv} -o json`)[1].toString())
 }
 
-var NvmecliUtil  = class {
+export default class NvmecliUtil {
+
     constructor(callback) {
         this._nvmeDevices = [];
         try {

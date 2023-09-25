@@ -1,9 +1,8 @@
-const GLib = imports.gi.GLib;
+import GLib from 'gi://GLib';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const CommandLineUtil = Me.imports.commandLineUtil;
+import CommandLineUtil from './commandLineUtil.js';
 
-var HddtempUtil = class extends CommandLineUtil.CommandLineUtil {
+export default class HddtempUtil extends CommandLineUtil {
 
     constructor() {
         super();
