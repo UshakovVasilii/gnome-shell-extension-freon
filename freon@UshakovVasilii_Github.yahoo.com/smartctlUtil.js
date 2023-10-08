@@ -3,7 +3,7 @@ const ByteArray = imports.byteArray;
 
 function getSmartData (argv){
     const smartctl = GLib.find_program_in_path('smartctl')
-    return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
+    return JSON.parse(new TextDecoder().decode( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
 }
 
 export default class SmartctlUtil {

@@ -2,7 +2,7 @@ import GLib from 'gi://GLib';
 
 function getNvmeData (argv){
     const nvme = GLib.find_program_in_path('nvme')
-    return JSON.parse(GLib.spawn_command_line_sync(`${nvme} ${argv} -o json`)[1].toString())
+    return JSON.parse(new TextDecoder().decode(GLib.spawn_command_line_sync(`${nvme} ${argv} -o json`)[1]))
 }
 
 export default class NvmecliUtil {

@@ -2,6 +2,10 @@ import GLib from 'gi://GLib';
 
 import CommandLineUtil from './commandLineUtil.js';
 
+function run_command(argv) {
+    return new TextDecoder().decode(GLib.spawn_command_line_sync(argv)[1]).trim();
+}
+
 export default class HddtempUtil extends CommandLineUtil {
 
     constructor() {
@@ -23,9 +27,9 @@ export default class HddtempUtil extends CommandLineUtil {
         let pid = undefined;
 
         if(systemctl) {
-            let activeState = GLib.spawn_command_line_sync(systemctl + " show hddtemp.service -p ActiveState")[1].toString().trim();
+            let activeState = run_command(systemctl + " show hddtemp.service -p ActiveState");
             if(activeState == "ActiveState=active") {
-                let output = GLib.spawn_command_line_sync(systemctl + " show hddtemp.service -p MainPID")[1].toString().trim();
+                let output = run_command(systemctl + " show hddtemp.service -p MainPID");
 
                 if(output.length && output.split("=").length == 2)
                     pid = Number(output.split("=")[1].trim());
@@ -34,7 +38,7 @@ export default class HddtempUtil extends CommandLineUtil {
 
         // systemd isn't used on this system, try sysvinit instead
         if(!pid && pidof) {
-            let output = GLib.spawn_command_line_sync("pidof hddtemp")[1].toString().trim();
+            let output = run_command("pidof hddtemp");
             if(output.length)
                 pid = Number(output.trim());
         }
