@@ -162,7 +162,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
 
         this._addTimer();
         this._updateUI(true);
-        this._updateUITimeoutId = Mainloop.timeout_add(250, () => {
+        this._updateUITimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
             this._updateUI();
             // readd to update queue
             return true;
@@ -428,12 +428,12 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
     }
 
     _updateTimeChanged(){
-        Mainloop.source_remove(this._timeoutId);
+        GLib.Source.remove(this._timeoutId);
         this._addTimer();
     }
 
     _addTimer(){
-        this._timeoutId = Mainloop.timeout_add_seconds(this._settings.get_int('update-time'), () => {
+        this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._settings.get_int('update-time'), () => {
             this._querySensors();
             // readd to update queue
             return true;
@@ -458,8 +458,8 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         this._destroySmartctlUtility();
         this._destroyNvmecliUtility();
 
-        Mainloop.source_remove(this._timeoutId);
-        Mainloop.source_remove(this._updateUITimeoutId);
+        GLib.Source.remove(this._timeoutId);
+        GLib.Source.remove(this._updateUITimeoutId);
 
         for (let signal of this._settingChangedSignals){
             this._settings.disconnect(signal);
