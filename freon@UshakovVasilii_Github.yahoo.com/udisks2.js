@@ -1,5 +1,4 @@
 import Gio from 'gi://Gio';
-import GLib from 'gi://GLib';
 
 const UDisksDriveProxy = Gio.DBusProxy.makeProxyWrapper(
 '<node> \

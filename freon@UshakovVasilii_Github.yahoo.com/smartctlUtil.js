@@ -1,5 +1,4 @@
 import GLib from 'gi://GLib';
-const ByteArray = imports.byteArray;
 
 function getSmartData (argv){
     const smartctl = GLib.find_program_in_path('smartctl')
