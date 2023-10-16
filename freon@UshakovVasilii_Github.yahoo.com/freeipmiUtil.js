@@ -4,22 +4,17 @@ import CommandLineUtil from './commandLineUtil.js';
 
 export default class FreeipmiUtil extends CommandLineUtil {
 
-    constructor() {
+    constructor(exec_method) {
         super();
 
         const path = GLib.find_program_in_path('ipmi-sensors');
         // --comma-separated-output: pseudo csv output format, splitting on comma may be good enough for the values we read.
         this._argv = path ? [path, '--comma-separated-output'] : null;
 
-        if (this._argv) {
-            const ExtensionUtils = imports.misc.extensionUtils;
-            const Me = ExtensionUtils.getCurrentExtension();
-            if (ExtensionUtils.getSettings().get_string('exec-method-freeipmi') === 'sudo')
-            {
-                const sudo_path = GLib.find_program_in_path('sudo');
-                // --non-interactive: do not ask for password, return if no permission.
-                this._argv = sudo_path ? [sudo_path, '--non-interactive'].concat(this._argv) : null;
-            }
+        if (this._argv && exec_method === 'sudo')
+        {
+            const pkexec_path = GLib.find_program_in_path('pkexec');
+            this._argv = pkexec_path ? [pkexec_path].concat(this._argv) : null;
         }
     }
 

@@ -255,7 +255,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
 
     _initFreeipmiUtility() {
         if (this._settings.get_boolean('use-generic-freeipmi'))
-            this._utils.freeipmi = new FreeipmiUtil();
+            this._utils.freeipmi = new FreeipmiUtil(this._settings.get_string('exec-method-freeipmi'));
     }
 
     _destroyFreeipmiUtility() {
