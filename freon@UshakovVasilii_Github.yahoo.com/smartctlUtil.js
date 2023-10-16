@@ -12,7 +12,7 @@ export default class SmartctlUtil {
         try {
             this._smartDevices = getSmartData("--scan")["devices"]
         } catch (e) {
-            global.log('[FREON] Unable to find smart devices: ' + e);
+            logError(e, '[FREON] Unable to find smart devices');
         }
         this._updated = true;
     }

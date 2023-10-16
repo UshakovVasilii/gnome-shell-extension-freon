@@ -29,7 +29,7 @@ export default class CommandLineUtil {
                 }
             });
         } catch(e){
-            global.log(e.toString());
+            logError(e);
         }
     }
 

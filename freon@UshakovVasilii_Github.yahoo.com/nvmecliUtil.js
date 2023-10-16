@@ -12,7 +12,7 @@ export default class NvmecliUtil {
         try {
             this._nvmeDevices = getNvmeData("list")["Devices"]
         } catch (e) {
-            global.log('[FREON] Unable to find nvme devices: ' + e);
+            logError(e, '[FREON] Unable to find nvme devices');
         }
         this._updated = true;
     }

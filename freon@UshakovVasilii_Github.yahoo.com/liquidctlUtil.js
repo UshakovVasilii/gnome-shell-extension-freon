@@ -70,7 +70,7 @@ export default class LiquidctlUtil extends CommandLineUtil {
                 this._temp = null;
                 this._rpm = null;
                 this._volt = null;
-                global.log('failed to process data from liquidctl: ' + e.toString());
+                logError(e, 'failed to process data from liquidctl');
             }
         });
     }

@@ -25,10 +25,10 @@ export default class SensorsUtil extends CommandLineUtil {
                     let errorRemoved = lineRemoved.replace(/ERROR.*Can't read/, "");
                         errorRemoved = errorRemoved.replace(/ERROR.*I\/O error/, "");
                         data = JSON.parse(errorRemoved);
-                    } catch (e) {
-                        global.log(e.toString());
-                        return [];
-                    }
+                } catch (e) {
+                    logError(e);
+                    return [];
+                }
             }
             this._data = data;
             callback();
