@@ -107,14 +107,6 @@ export default class UDisks2 {
     }
 
     destroy(callback) {
-        for (let proxy of this._udisksProxies){
-            if(proxy.drive){
-                proxy.drive.run_dispose();
-            }
-            if(proxy.ata){
-                proxy.ata.run_dispose();
-            }
-        }
         this._udisksProxies = [];
     }
 
