@@ -4,7 +4,11 @@ import St from 'gi://St';
 
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-export default GObject.registerClass(class FreonItem extends PopupMenu.PopupBaseMenuItem {
+export default class FreonItem extends PopupMenu.PopupBaseMenuItem {
+
+    static {
+        GObject.registerClass(this);
+    }
 
     constructor(gIcon, key, label, value, displayName) {
         super();
@@ -13,10 +17,10 @@ export default GObject.registerClass(class FreonItem extends PopupMenu.PopupBase
         this._gIcon = gIcon;
 
         this._labelActor = new St.Label({text: displayName ? displayName : label, x_align: Clutter.ActorAlign.CENTER, x_expand: true});
-        this.actor.add(new St.Icon({ style_class: 'popup-menu-icon', gicon : gIcon}));
+        this.actor.add_child(new St.Icon({ style_class: 'popup-menu-icon', gicon : gIcon}));
         this.actor.add_child(this._labelActor);
         this._valueLabel = new St.Label({text: value});
-        this.actor.add(this._valueLabel);
+        this.actor.add_child(this._valueLabel);
     }
 
     set main(main) {
@@ -46,4 +50,4 @@ export default GObject.registerClass(class FreonItem extends PopupMenu.PopupBase
     set value(value) {
         this._valueLabel.text = value;
     }
-});
+}

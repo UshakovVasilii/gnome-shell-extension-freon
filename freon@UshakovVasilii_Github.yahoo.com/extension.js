@@ -50,7 +50,11 @@ function _makeLogFunction(prefix) {
     }
 }
 
-const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extends PanelMenu.Button {
+class FreonMenuButton extends PanelMenu.Button {
+
+    static {
+        GObject.registerClass(this);
+    }
 
     constructor(uuid, path, settings) {
         super(0);
@@ -112,7 +116,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             this._createInitialIcon();
         }
 
-        this.add_actor(this._menuLayout);
+        this.add_child(this._menuLayout);
 
         this._settingChangedSignals = [];
 
@@ -176,7 +180,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
             if(gicon)
                 i.gicon = gicon;
 
-            this._menuLayout.add(i);
+            this._menuLayout.add_child(i);
         }
         let l = new St.Label({
             text: '\u26a0',  // ⚠, warning
@@ -185,13 +189,13 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
         l.set_style_class_name(showIcon ? 'freon-panel-icon-label' : 'freon-panel-no-icon-label');
 
         this._hotLabels[s] = l;
-        this._menuLayout.add(l);
+        this._menuLayout.add_child(l);
     }
 
     _createInitialIcon() {
         this._initialIcon = new St.Icon({ style_class: 'system-status-icon'});
         this._initialIcon.gicon = this._sensorIcons['gpu-temperature'];
-        this._menuLayout.add(this._initialIcon);
+        this._menuLayout.add_child(this._initialIcon);
     }
 
     _rerender(){
@@ -200,7 +204,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
     }
 
     _positionInPanelChanged(){
-        this.container.get_parent().remove_actor(this.container);
+        this.container.get_parent().remove_child(this.container);
 
         // small HACK with private boxes :)
         let boxes = {
@@ -976,7 +980,7 @@ const FreonMenuButton = GObject.registerClass(class Freon_FreonMenuButton extend
     get positionInPanel(){
         return this._settings.get_string('position-in-panel');
     }
-});
+}
 
 export default class extends Extension {
 
