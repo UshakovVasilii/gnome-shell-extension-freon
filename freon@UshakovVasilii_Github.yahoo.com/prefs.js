@@ -100,7 +100,7 @@ export default class FreonPreferences extends ExtensionPreferences {
         group.add(this._addSwitch("Show Rotation Rate Unit", "show-rotationrate-unit"));
         group.add(this._addSwitch("Show Voltage Unit", "show-voltage-unit"));
         group.add(this._addSwitch("Show Power Unit", "show-power-unit"));
-        group.add(this._addSwitch("Show Decimal Values", "show-decimal-value", "Show additionnal digits after decimal point"));
+        group.add(this._addSwitch("Show Decimal Values", "show-decimal-value", "Show additional digits after decimal point"));
         return group;
     }
 
