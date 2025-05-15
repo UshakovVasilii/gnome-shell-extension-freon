@@ -175,6 +175,11 @@ class FreonMenuButton extends PanelMenu.Button {
             // readd to update queue
             return true;
         });
+
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+            this._positionInPanelChanged();
+            return false; // 只执行一次
+        });
     }
 
     _createHotItem(s, showIcon, gicon){
@@ -208,31 +213,47 @@ class FreonMenuButton extends PanelMenu.Button {
         this._querySensors();
     }
 
-    _positionInPanelChanged(){
-        this.container.get_parent().remove_child(this.container);
-
-        // small HACK with private boxes :)
-        let boxes = {
-            left: Main.panel._leftBox,
-            center: Main.panel._centerBox,
-            right: Main.panel._rightBox
-        };
-
-        let i = this._settings.get_int('panel-box-index');
-        let p = this._settings.get_int('position-in-panel');
-
-        console.debug(p)
-
-        switch (p) {
-            case 0:
-                boxes['left'].insert_child_at_index(this.container, i); break;
-            case 1:
-                boxes['center'].insert_child_at_index(this.container, i); break;
-            case 2:
-            default:
-                boxes['right'].insert_child_at_index(this.container, i); break;
+    _positionInPanelChanged() {
+        try {
+            if (!this.container || !this.container.get_parent()) {
+                console.debug('Container not ready yet, skipping position change');
+                return;
+            }
+        
+            if (!Main.panel._leftBox || !Main.panel._centerBox || !Main.panel._rightBox) {
+                console.debug('Panel boxes not available yet');
+                return;
+            }
+        
+            this.container.get_parent().remove_child(this.container);
+        
+            // small HACK with private boxes :)
+            let boxes = {
+                left: Main.panel._leftBox,
+                center: Main.panel._centerBox,
+                right: Main.panel._rightBox
+            };
+        
+            let i = this._settings.get_int('panel-box-index');
+            let p = this._settings.get_int('position-in-panel');
+        
+            console.debug('Position in panel:', p);
+        
+            switch (p) {
+                case 0:
+                    boxes['left'].insert_child_at_index(this.container, i); 
+                    break;
+                case 1:
+                    boxes['center'].insert_child_at_index(this.container, i); 
+                    break;
+                case 2:
+                default:
+                    boxes['right'].insert_child_at_index(this.container, i); 
+                    break;
+            }
+        } catch (error) {
+            console.error('Error while changing panel position:', error);
         }
-        //boxes[p].insert_child_at_index(this.container, i);
     }
 
     _showIconOnPanelChanged(){
@@ -1041,11 +1062,14 @@ class FreonMenuButton extends PanelMenu.Button {
 export default class extends Extension {
 
     enable() {
-        this._freonMenu = new FreonMenuButton(this.uuid, this.path, this.getSettings());
-        Main.panel.addToStatusArea('freonMenu', this._freonMenu);
-        this._freonMenu._positionInPanelChanged();
+        this._freonMenu = new FreonMenuButton(this.uuid, this.path, this.getSettings());  
+        try {
+            Main.panel.addToStatusArea('freonMenu', this._freonMenu);
+        } catch (error) {
+            console.error('Error adding Freon to status area:', error);
+        }  
     }
-
+    
     disable() {
         this._freonMenu?.destroy();
         this._freonMenu = null;
