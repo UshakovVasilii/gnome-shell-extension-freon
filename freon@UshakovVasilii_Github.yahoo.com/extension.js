@@ -175,8 +175,7 @@ class FreonMenuButton extends PanelMenu.Button {
             // readd to update queue
             return true;
         });
-
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+        this._positionInPanelChangedTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this._positionInPanelChanged();
             return false; // 只执行一次
         });
@@ -534,6 +533,7 @@ class FreonMenuButton extends PanelMenu.Button {
 
         GLib.Source.remove(this._timeoutId);
         GLib.Source.remove(this._updateUITimeoutId);
+        GLib.Source.remove(this._positionInPanelChangedTimeoutId);
 
         for (let signal of this._settingChangedSignals){
             this._settings.disconnect(signal);
