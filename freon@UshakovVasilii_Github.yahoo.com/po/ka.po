@@ -1,0 +1,414 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: freon\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-28 08:56+0300\n"
+"PO-Revision-Date: 2026-02-23 15:55+0100\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: aticonfigUtil.js\n"
+"X-Poedit-SearchPath-1: bumblebeeNvidiaUtil.js\n"
+"X-Poedit-SearchPath-2: commandLineUtil.js\n"
+"X-Poedit-SearchPath-3: extension.js\n"
+"X-Poedit-SearchPath-4: freeipmiUtil.js\n"
+"X-Poedit-SearchPath-5: freonItem.js\n"
+"X-Poedit-SearchPath-6: hddtempUtil.js\n"
+"X-Poedit-SearchPath-7: liquidctlUtil.js\n"
+"X-Poedit-SearchPath-8: metadata.json\n"
+"X-Poedit-SearchPath-9: nvidiaUtil.js\n"
+"X-Poedit-SearchPath-10: nvmecliUtil.js\n"
+"X-Poedit-SearchPath-11: prefs.js\n"
+"X-Poedit-SearchPath-12: sensorsUtil.js\n"
+"X-Poedit-SearchPath-13: smartctlUtil.js\n"
+"X-Poedit-SearchPath-14: stylesheet.css\n"
+"X-Poedit-SearchPath-15: udisks2.js\n"
+"X-Poedit-SearchPath-16: schemas/"
+"org.gnome.shell.extensions.sensors.gschema.xml\n"
+
+#: bumblebeeNvidiaUtil.js:79
+msgid "Bumblebee + NVIDIA"
+msgstr "Bumblebee + NVIDIA"
+
+#: extension.js:606
+msgid "Please run sensors-detect as root."
+msgstr "გაუშვით ბრძანება sensors-detect მომხმარებლით root."
+
+#: extension.js:607
+msgid ""
+"Please install lm_sensors.\n"
+"If this doesn't help, click here to report with your sensors output!"
+msgstr ""
+"დააყენეთ პაკეტი lm_sensors.\n"
+"თუ ამან არ გიშველათ, დააწკაპუნეთ აქ, რომ ბრძანების sensors გამოტანილი "
+"ინფორმაცია გამოგვიგზავნოთ!"
+
+#: extension.js:674
+msgid "Average"
+msgstr "საშუალო"
+
+#: extension.js:681
+msgid "Maximum"
+msgstr "მაქსიმუმი"
+
+#: extension.js:697
+msgid " rpm"
+msgstr " ბრ/წთ"
+
+#: extension.js:703
+#, javascript-format
+msgid "%d%s"
+msgstr "%d%s"
+
+#: extension.js:711
+msgid "V"
+msgstr "ვ"
+
+#: extension.js:717 extension.js:728
+#, javascript-format
+msgid "%s%.2f%s"
+msgstr "%s%.2f%s"
+
+#: extension.js:722
+msgid "W"
+msgstr "ვტ"
+
+#: extension.js:779
+msgid "Go to the Freon wiki"
+msgstr "Freon-ის ვიკიზე გადასვლა"
+
+#: extension.js:787
+msgid "Sensor Settings"
+msgstr "სენსორის მორგება"
+
+#: extension.js:904 prefs.js:154 prefs.js:171
+msgid "Temperature"
+msgstr "ტემპერატურა"
+
+#: extension.js:921 prefs.js:157 prefs.js:175
+msgid "Rotation Rate"
+msgstr "ბრუნვის სიხშირე"
+
+#: extension.js:929 prefs.js:160 prefs.js:179
+msgid "Voltage"
+msgstr "ძაბვა"
+
+#: prefs.js:32
+msgid "Display Options"
+msgstr "ჩვენების მორგება"
+
+#: prefs.js:37
+msgid "Poll Sensors Every (sec)"
+msgstr "სენსორებიდან გამოთხოვა ყოველ (წმ)"
+
+#: prefs.js:46
+msgid "Position on Panel"
+msgstr "მდებარეობა პანელზე"
+
+#: prefs.js:47
+msgid "Left"
+msgstr "მარცხენა"
+
+#: prefs.js:47
+msgid "Center"
+msgstr "ცენტრი"
+
+#: prefs.js:47
+msgid "Right"
+msgstr "მარჯვენა"
+
+#: prefs.js:52
+msgid "Index on Panel"
+msgstr "ინდექსი პანელზე"
+
+#: prefs.js:61 schemas/org.gnome.shell.extensions.sensors.gschema.xml:32
+msgid "Show Icon on Panel"
+msgstr "ხატულას ჩვენება პანელზე"
+
+#: prefs.js:64
+msgid "Temperature Unit"
+msgstr "ტემპერატური ერთეული"
+
+#: prefs.js:65
+msgid "°C"
+msgstr "°C"
+
+#: prefs.js:65
+msgid "°F"
+msgstr "°F"
+
+#: prefs.js:70
+msgid "Show Temperature Unit"
+msgstr "ტემპერატურის ერთეულის ჩვენება"
+
+#: prefs.js:73
+msgid "Show Rotation Rate Unit"
+msgstr "ბრუნვის სიხშირის ერთეულის ჩვენება"
+
+#: prefs.js:76
+msgid "Show Voltage Unit"
+msgstr "ძაბვის ერთეულის ჩვენება"
+
+#: prefs.js:79
+msgid "Show Power Unit"
+msgstr "სიმძლავრის ერთეულის ჩვენება"
+
+#: prefs.js:82
+msgid "Show Decimal Values"
+msgstr "წილადი მნიშვნელობების ჩვენება"
+
+#: prefs.js:83
+msgid "Show additionnal digits after decimal point"
+msgstr "დამატებითი ციფრების ჩვენება წილადის წერტილის შემდეგ"
+
+#: prefs.js:89
+msgid "Generic Sensor Providers"
+msgstr "ზოგადი სენსორის მომწოდებლები"
+
+#: prefs.js:95 schemas/org.gnome.shell.extensions.sensors.gschema.xml:86
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:87
+msgid "Read sensors from lm-sensors"
+msgstr "სენსორების წაკითხვა lm-sensors-იდან"
+
+#: prefs.js:99 schemas/org.gnome.shell.extensions.sensors.gschema.xml:92
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:93
+msgid "Read sensors using ipmi-sensors from FreeIPMI"
+msgstr "სენსორების წაკითხვა ipmi-sensors-ის გამოყენებით FreeIPMI-დან"
+
+#: prefs.js:103
+msgid "Direct"
+msgstr "პირდაპირი"
+
+#: prefs.js:111
+msgid "Read sensors from liquidctl (requires v1.7.0 or later)"
+msgstr "სენსორების წაკითხვა liquidctl-დან (სჭირდება v1.7.0, ან უფრო ახალი)"
+
+#: prefs.js:114
+msgid "GPU Sensor Providers"
+msgstr "GPU-ის სენსორის მომწოდებლები"
+
+#: prefs.js:128
+msgid "Drive Sensor Providers"
+msgstr "დისკის სენსორის მომწოდებლები"
+
+#: prefs.js:140
+msgid "Read drive sensors using smartctl from smartmontools"
+msgstr "დისკის სენსორების წაკითხვა smartctl-ით პაკეტიდან smartmontools"
+
+#: prefs.js:149
+msgid "Show Sensors"
+msgstr "სენსორების ჩვენება"
+
+#: prefs.js:163
+msgid "Power"
+msgstr "კვება"
+
+#: prefs.js:166
+msgid "Group Items"
+msgstr "ელემენტების დაჯგუფება"
+
+#: prefs.js:172 schemas/org.gnome.shell.extensions.sensors.gschema.xml:165
+msgid "Group three or more temperature sensors"
+msgstr "სამი ან მეტი ტემპერატურის სენსორის დაჯგუფება"
+
+#: prefs.js:176
+msgid "Group three or more rotation rate sensors"
+msgstr "სამი ან მეტი ბრუნვის სიჩქარის სენსორის დაჯგუფება"
+
+#: prefs.js:180 schemas/org.gnome.shell.extensions.sensors.gschema.xml:177
+msgid "Group three or more voltage sensors"
+msgstr "სამი ან მეტი ძაბვის სენსორის დაჯგუფება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:8
+msgid "Sensors to show in panel"
+msgstr "პანელზე საჩვენებელი სენსორები"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:9
+msgid "Select the sensord whose values has to be shown in the panel"
+msgstr "აირჩიეთ სენსორები, რომლის მნიშვნელობებიც ნაჩვენები იქნება პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:14
+msgid "Seconds before next update"
+msgstr "წამი შემდეგ განახლებამდე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:15
+msgid ""
+"This is the seconds after CPU temperature extension updates the data from "
+"the system"
+msgstr ""
+"ეს წამებია, რომლის შემდეგაც CPU-ის ტემპერატურის გაფართოება მონაცემებს "
+"სისტემიდან განაახლებს"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:20
+msgid "Position in Panel"
+msgstr "მდებარეობა პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:21
+msgid "Position in Panel ('left', 'center', 'right')"
+msgstr "პოზიცია პანელზე ('მარცხნივ', 'ცენტრი', 'მარჯვნივ')"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:26
+msgid "Index in panel box"
+msgstr "ინდექსი პანელის ველში"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:27
+msgid ""
+"Index within the selected panel box (0: first, 1: second, ..., -1: last)"
+msgstr "ინდექსი არჩეული პანელის ველში (0: პირველი, 1: მეორე, ..., -1: ბოლო)"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:33
+msgid "Show sensor icon on top panel"
+msgstr "სენსორის ხატულას ჩვენება ზედა პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:38
+msgid "Display Temperature"
+msgstr "ტემპერატურის ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:39
+msgid "Display temperature"
+msgstr "ტემპერატურის ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:44
+msgid "Unit"
+msgstr "ერთეული"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:45
+msgid ""
+"The unit ('centigrade' or 'fahrenheit') the extension should display the "
+"temperature in"
+msgstr ""
+"ერთეული ('ცელსიუსი', ან 'ფარენჰეიტი'), რომლითაც გაფართოებამ ტემპერატურა "
+"უნდა აჩვენოს"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:50
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:51
+msgid "Show degrees celsius/fahrenheit on Panel"
+msgstr "ცელსიუსის/ფარენჰეიტის გრადუსების ჩვენება პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:56
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:57
+msgid "Show RPM on Panel"
+msgstr "ბრუნვის სიჩქარის ჩვენება პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:62
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:63
+msgid "Show volts on Panel"
+msgstr "ვოლტების ჩვენება პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:68
+msgid "Display Power"
+msgstr "კვების ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:69
+msgid "Display power"
+msgstr "კვების ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:74
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:75
+msgid "Show Watts on Panel"
+msgstr "ვატების ჩვენება პანელზე"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:80
+msgid "Show decimal value"
+msgstr "წილადი მნიშვნელობის ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:81
+msgid "Show one digit after decimal"
+msgstr "ერთი ციფრის ჩვენება წილადის შემდეგ"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:98
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:99
+msgid "Method to run FreeIPMI utility"
+msgstr "მეთოდი FreeIPMI პროგრამის გასაშვებად"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:104
+msgid "Read sensors from liquidctl"
+msgstr "სენსორების წაკითხვა liquidctl-დან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:105
+msgid "Read sensors from (requires liquidctl v1.7.0 or later)"
+msgstr ""
+"სენსორების წაკითხვა (სჭირდება liquidctl v1.7.0, ან უფრო ახალი) საიდან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:110
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:111
+msgid "Read GPU sensors from NVIDIA driver"
+msgstr "GPU-ის სენსორების წაკითხვა NVIDIA-ის დრაივერიდან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:116
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:117
+msgid "Read GPU sensors from Bumblebee + NVIDIA driver"
+msgstr "GPU-ის სენსორების წაკითხვა Bumblebee + NVIDIA-ის დრაივერიდან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:122
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:123
+msgid "Read GPU sensors from Catalyst driver"
+msgstr "GPU-ის სენსორების წაკითხვა Catalyst-ის დრაივერიდან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:128
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:129
+msgid "Read drive sensors from Udisks2"
+msgstr "დისკის სენსორების წაკითხვა Udisks2-დან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:134
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:135
+msgid "Read drive sensors using Hddtemp"
+msgstr "დისკის სენსორების წაკითხვა Hddtemp-დან"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:140
+msgid "Read drive sensors using smartctl"
+msgstr "დისკის სენსორების წაკითხვა smartctl-ით"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:141
+msgid "Read drive sensors using smartctl from smartmontool"
+msgstr "დისკის სენსორების წაკითხვა smartctl-ით პაკეტიდან smartmontools"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:146
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:147
+msgid "Read drive sensors using nvme-cli"
+msgstr "დისკის სენსორების წაკითხვა nvme-cli-ით"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:152
+msgid "Display rotationrate"
+msgstr "ბრუნვის სიჩქარის ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:153
+msgid "Display rotation rate (per minute)"
+msgstr "ბრუნვის სიჩქარის ჩვენება (წუთში)"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:158
+msgid "Display voltage"
+msgstr "ძაბვის ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:159
+msgid "Display voltage of various components"
+msgstr "სხვადასხვა კომპონენტების ძაბვის ჩვენება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:164
+msgid "Group temperature menu items"
+msgstr "ტემპერატურის მენიუს პუნქტების დაჯგუფება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:170
+msgid "Group Fan speed menu items"
+msgstr "ვენტილატორის სიჩქარის მენიუს პუნქტების დაჯგუფება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:171
+msgid "Group three or more fan sensors"
+msgstr "სამი ან მეტი ვენტილატორის სენსორის დაჯგუფება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:176
+msgid "Group voltage menu items"
+msgstr "ძაბვის მენიუს პუნქტების დაჯგუფება"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:182
+msgid "Enable debug logging"
+msgstr "გამართვის ჟურნალის ჩართვა"
+
+#: schemas/org.gnome.shell.extensions.sensors.gschema.xml:183
+msgid "Enable debug logging from the extension"
+msgstr "გაფართოების გამართვის შეტყობინებების ჟურნალში ჩაწერა"
