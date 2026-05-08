@@ -34,9 +34,11 @@ export default class UDisks2 {
 
     constructor(callback) {
         this._udisksProxies = [];
+        this._temps = [];
         this._get_drive_ata_proxies((proxies) => {
             this._udisksProxies = proxies;
-            callback();
+            this._refreshTemps();
+            if (callback) callback();
         });
         this._updated = true;
     }
@@ -53,9 +55,12 @@ export default class UDisks2 {
         this._updated = updated;
     }
 
-    // creates a list of sensor objects from the list of proxies given
     get temp() {
-        return this._udisksProxies.filter(function(proxy) {
+        return this._temps;
+    }
+
+    _refreshTemps() {
+        this._temps = this._udisksProxies.filter(function(proxy) {
             // 0K means no data available
             return proxy.ata.SmartTemperature > 0;
         }).map(function(proxy) {
@@ -108,10 +113,13 @@ export default class UDisks2 {
 
     destroy(callback) {
         this._udisksProxies = [];
+        this._temps = [];
     }
 
     execute(callback) {
+        this._refreshTemps();
         this._updated = true;
+        if (callback) callback();
     }
 
 };
