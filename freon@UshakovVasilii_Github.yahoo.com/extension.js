@@ -177,6 +177,7 @@ class FreonMenuButton extends PanelMenu.Button {
         });
         this._positionInPanelChangedTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this._positionInPanelChanged();
+            this._positionInPanelChangedTimeoutId = 0;
             return false; // execute only once
         });
     }
@@ -533,7 +534,8 @@ class FreonMenuButton extends PanelMenu.Button {
 
         GLib.Source.remove(this._timeoutId);
         GLib.Source.remove(this._updateUITimeoutId);
-        GLib.Source.remove(this._positionInPanelChangedTimeoutId);
+        if (this._positionInPanelChangedTimeoutId)
+            GLib.Source.remove(this._positionInPanelChangedTimeoutId);
 
         for (let signal of this._settingChangedSignals){
             this._settings.disconnect(signal);
