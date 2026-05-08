@@ -1,10 +1,11 @@
+import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 
 export default class BatteryUtil {
 
     constructor(callback) {
-        this._bat_path = [];    // Path to batteries for cat
+        this._bat_path = [];    // Filesystem paths to batteries
         this._find_batteries();
     }
 
@@ -73,38 +74,37 @@ export default class BatteryUtil {
     }
 
     _find_batteries() {
-        const cmd = `find /sys/class/power_supply/ -type l -name "BAT*"`
-        let cmd_res = []
+        const power_supply = Gio.File.new_for_path('/sys/class/power_supply');
+        let enumerator;
         try {
-            cmd_res = GLib.spawn_command_line_sync(cmd)
+            enumerator = power_supply.enumerate_children(
+                'standard::name',
+                Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+                null);
         } catch (e) {
-            logError(e, `[FREON] failed to execute "find"`)
+            logError(e, '[FREON] failed to enumerate /sys/class/power_supply');
+            return;
         }
-        if (cmd_res[0] == true) {
-            this._bat_path = new TextDecoder().decode( cmd_res[1] ).split('\n')
-            let trailing_path = this._bat_path.pop()
-            if (trailing_path.length > 1)   // remove empty trailing Elements
-                this._bat_path.push(trailing_path)
+
+        let info;
+        while ((info = enumerator.next_file(null)) != null) {
+            let name = info.get_name();
+            if (name.startsWith('BAT'))
+                this._bat_path.push('/sys/class/power_supply/' + name);
         }
-        else {
-            print(`"find" returned an error: ${cmd_res[2]}`)
-        }
+        enumerator.close(null);
     }
 
     _get_sensor_data(bat_path, sensor) {
-        const path = `${bat_path}/${sensor}`
-        const cmd = "cat " + path;
-
-        let cmd_res = []
+        const path = `${bat_path}/${sensor}`;
         try {
-            cmd_res = GLib.spawn_command_line_sync(cmd)
+            let [ok, contents] = GLib.file_get_contents(path);
+            if (ok)
+                return new TextDecoder().decode(contents);
         } catch (e) {
-            logError(e, `[FREON] failed to execute "cat"`)
+            logError(e, `[FREON] failed to read ${path}`);
         }
-        if (cmd_res[0] == true)
-            return new TextDecoder().decode(cmd_res[1])
-        else
-            return ""
+        return "";
     }
 
 };
