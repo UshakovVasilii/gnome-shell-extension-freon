@@ -145,7 +145,7 @@ class FreonMenuButton extends PanelMenu.Button {
         this._addSettingChangedSignal('show-battery-stats', this._batteryUtilityChanged.bind(this));
 
         this._addSettingChangedSignal('use-gpu-nvidia', this._nvidiaUtilityChanged.bind(this));
-        this._addSettingChangedSignal('use-gpu-nvidiabumblebee', this._nvidiabumblebeeUtilityChanged.bind(this));
+        this._addSettingChangedSignal('use-gpu-bumblebeenvidia', this._nvidiabumblebeeUtilityChanged.bind(this));
         this._addSettingChangedSignal('use-gpu-aticonfig', this._aticonfigUtilityChanged.bind(this));
 
         this._addSettingChangedSignal('use-drive-udisks2', this._udisks2UtilityChanged.bind(this));
