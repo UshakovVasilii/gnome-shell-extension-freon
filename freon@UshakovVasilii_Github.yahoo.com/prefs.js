@@ -71,7 +71,7 @@ export default class FreonPreferences extends ExtensionPreferences {
             title: _('Panel Position'),
             model: new Gtk.StringList({strings: ["Left", "Center", "Right"] }),
         })
-        this._settings.bind("position-in-panel", position_in_panel, "selected", Gio.SettingsBindFlags.NO_SENSETIVITY);
+        this._settings.bind("position-in-panel", position_in_panel, "selected", Gio.SettingsBindFlags.NO_SENSITIVITY);
         group.add(position_in_panel)
 
         
@@ -93,7 +93,7 @@ export default class FreonPreferences extends ExtensionPreferences {
             title: _('Temperature Unit'),
             model: new Gtk.StringList({strings: ["\u00b0C", "\u00b0F"]}),
         });
-        this._settings.bind("unit", unit_setting, "selected", Gio.SettingsBindFlags.NO_SENSETIVITY);
+        this._settings.bind("unit", unit_setting, "selected", Gio.SettingsBindFlags.NO_SENSITIVITY);
         group.add(unit_setting);
 
         group.add(this._addSwitch("Show Temperature Unit", "show-temperature-unit"));
@@ -119,7 +119,7 @@ export default class FreonPreferences extends ExtensionPreferences {
             selected: this._settings.get_int("freeimpi-selected"),
             subtitle: "Read sensors using ipmi-sensors from FreeIPMI"
         });
-        this._settings.bind("freeimpi-selected", freeimpi, "selected", Gio.SettingsBindFlags.NO_SENSETIVITY);
+        this._settings.bind("freeimpi-selected", freeimpi, "selected", Gio.SettingsBindFlags.NO_SENSITIVITY);
         group.add(freeimpi);
 
         return group;
