@@ -170,7 +170,7 @@ class FreonMenuButton extends PanelMenu.Button {
 
         this._addTimer();
         this._updateUI(true);
-        this._updateUITimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+        this._updateUITimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this._updateUI();
             // read to update queue
             return true;
@@ -568,7 +568,7 @@ class FreonMenuButton extends PanelMenu.Button {
     }
 
     _fixNames(sensors){
-        let names = [];
+        let names = new Set();
 
         for (let s of sensors){
             if(s.type == 'separator' ||
@@ -580,7 +580,7 @@ class FreonMenuButton extends PanelMenu.Button {
             let name = s.label;
             let i = 1;
 
-            while(names.indexOf(name) >= 0){
+            while(names.has(name)){
                 name = s.label + '-' + i++;
             }
 
@@ -589,7 +589,7 @@ class FreonMenuButton extends PanelMenu.Button {
                 s.label = name;
             }
 
-            names.push(name);
+            names.add(name);
         }
     }
 
@@ -601,74 +601,74 @@ class FreonMenuButton extends PanelMenu.Button {
         let voltageInfo = [];
         let powerInfo = [];
 
+        const showTemp = this._settings.get_boolean('show-temperature');
+        const showRpm = this._settings.get_boolean('show-rotationrate');
+        const showVolt = this._settings.get_boolean('show-voltage');
+        const showPower = this._settings.get_boolean('show-power');
+        const showBattery = this._settings.get_boolean('show-battery-stats');
+
         if (this._utils.sensors && this._utils.sensors.available) {
-            if (this._settings.get_boolean('show-temperature')) {
+            if (showTemp) {
                 sensorsTempInfo = sensorsTempInfo.concat(this._utils.sensors.temp);
                 gpuTempInfo = gpuTempInfo.concat(this._utils.sensors.gpu);
                 driveTempInfo = driveTempInfo.concat(this._utils.sensors.disks);
             }
 
-            if (this._settings.get_boolean('show-rotationrate'))
+            if (showRpm)
                 fanInfo = fanInfo.concat(this._utils.sensors.rpm);
-            if (this._settings.get_boolean('show-voltage'))
+            if (showVolt)
                 voltageInfo = voltageInfo.concat(this._utils.sensors.volt);
-            if (this._settings.get_boolean('show-power')) {
+            if (showPower) {
                 powerInfo = powerInfo.concat(this._utils.sensors.power);
             }
-                
         }
 
         if (this._utils.freeipmi && this._utils.freeipmi.available) {
-            if (this._settings.get_boolean('show-temperature'))
+            if (showTemp)
                 sensorsTempInfo = sensorsTempInfo.concat(this._utils.freeipmi.temp);
-            if (this._settings.get_boolean('show-rotationrate'))
+            if (showRpm)
                 fanInfo = fanInfo.concat(this._utils.freeipmi.rpm);
-            if (this._settings.get_boolean('show-voltage'))
+            if (showVolt)
                 voltageInfo = voltageInfo.concat(this._utils.freeipmi.volt);
         }
 
         if (this._utils.liquidctl && this._utils.liquidctl.available) {
-            if (this._settings.get_boolean('show-temperature'))
+            if (showTemp)
                 sensorsTempInfo = sensorsTempInfo.concat(this._utils.liquidctl.temp);
-            if (this._settings.get_boolean('show-rotationrate'))
+            if (showRpm)
                 fanInfo = fanInfo.concat(this._utils.liquidctl.rpm);
-            if (this._settings.get_boolean('show-voltage'))
+            if (showVolt)
                 voltageInfo = voltageInfo.concat(this._utils.liquidctl.volt);
         }
 
         if (this._utils.battery && this._utils.battery.available) {
-            if (this._settings.get_boolean('show-battery-stats')) {
+            if (showBattery) {
                 powerInfo = powerInfo.concat(this._utils.battery.power)
             }
         }
 
-        if (this._utils.nvidia && this._utils.nvidia.available)
-            if (this._settings.get_boolean('show-temperature'))
+        if (showTemp) {
+            if (this._utils.nvidia && this._utils.nvidia.available)
                 gpuTempInfo = gpuTempInfo.concat(this._utils.nvidia.temp);
 
-        if (this._utils.nvidiabumblebee && this._utils.nvidiabumblebee.available)
-            if (this._settings.get_boolean('show-temperature'))
+            if (this._utils.nvidiabumblebee && this._utils.nvidiabumblebee.available)
                 gpuTempInfo = gpuTempInfo.concat(this._utils.nvidiabumblebee.temp);
 
-        if (this._utils.aticonfig && this._utils.aticonfig.available)
-            if (this._settings.get_boolean('show-temperature'))
+            if (this._utils.aticonfig && this._utils.aticonfig.available)
                 gpuTempInfo = gpuTempInfo.concat(this._utils.aticonfig.temp);
 
-        if (this._utils.udisks2 && this._utils.udisks2.available)
-            if (this._settings.get_boolean('show-temperature'))
+            if (this._utils.udisks2 && this._utils.udisks2.available)
                 driveTempInfo = driveTempInfo.concat(this._utils.udisks2.temp);
 
-        if (this._utils.hddtemp && this._utils.hddtemp.available)
-            if (this._settings.get_boolean('show-temperature'))
+            if (this._utils.hddtemp && this._utils.hddtemp.available)
                 driveTempInfo = driveTempInfo.concat(this._utils.hddtemp.temp);
 
-        if (this._utils.smartctl && this._utils.smartctl.available)
-            if (this._settings.get_boolean('show-temperature'))
+            if (this._utils.smartctl && this._utils.smartctl.available)
                 driveTempInfo = driveTempInfo.concat(this._utils.smartctl.temp);
 
-        if (this._utils.nvmecli && this._utils.nvmecli.available)
-            if (this._settings.get_boolean('show-temperature'))
+            if (this._utils.nvmecli && this._utils.nvmecli.available)
                 driveTempInfo = driveTempInfo.concat(this._utils.nvmecli.temp);
+        }
 
         const comparator = (a, b) => a.label.localeCompare(b.label, undefined, {numeric: true})
         sensorsTempInfo.sort(comparator);
