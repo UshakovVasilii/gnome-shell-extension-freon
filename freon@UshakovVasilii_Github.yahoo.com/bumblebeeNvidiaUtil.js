@@ -45,8 +45,10 @@ export default class BumblebeeNvidiaUtil extends CommandLineUtil {
     _detectLabel() {
         // optirun nvidia-smi -L
         // GPU 0: GeForce GT 525M (UUID: GPU-...)
-        for (let line of GLib.spawn_command_line_sync(this._path + " nvidia-smi -L")){
-        let match = /.*GPU [\d]:([\w\d\ ]+).*/.exec(line);
+        let [, stdout] = GLib.spawn_command_line_sync(this._path + " nvidia-smi -L");
+        let lines = new TextDecoder().decode(stdout).split('\n');
+        for (let line of lines){
+            let match = /.*GPU [\d]:([\w\d\ ]+).*/.exec(line);
             if(match){
                 this._label = match[1];
                 if(this._label)
@@ -96,6 +98,7 @@ export default class BumblebeeNvidiaUtil extends CommandLineUtil {
     destroy(){
         super.destroy();
         this._lockMonitor.disconnect(this._lockMonitor.id);
+        this._lockMonitor.cancel();
     }
 
 };
