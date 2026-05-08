@@ -45,7 +45,8 @@ export default class HddtempUtil extends CommandLineUtil {
 
         if(nc && pid) {
             // get daemon command line
-            let cmdline = GLib.file_get_contents('/proc/'+pid+'/cmdline');
+            let [, cmdlineBytes] = GLib.file_get_contents('/proc/'+pid+'/cmdline');
+            let cmdline = new TextDecoder().decode(cmdlineBytes);
             // get port or assume default
             let match = /(-p\W*|--port=)(\d{1,5})/.exec(cmdline)
             let port = match ? parseInt(match[2]) : 7634;
