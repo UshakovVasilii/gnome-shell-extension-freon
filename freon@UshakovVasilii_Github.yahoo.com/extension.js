@@ -703,11 +703,10 @@ class FreonMenuButton extends PanelMenu.Button {
         } else {
             let tempMean = 0;
             let tempMax = 0;
+            let sum = 0;
+            let total = 0;
 
             for (let i of tempInfo) {
-                let sum = 0;
-                let total = 0;
-
                 if (i.temp !== null && i.temp >= 0) {
                     total++;
                     sum += i.temp;
@@ -715,10 +714,10 @@ class FreonMenuButton extends PanelMenu.Button {
                     if (i.temp > tempMax)
                         tempMax = i.temp;
                 }
-
-                if (total != 0)
-                    tempMean = sum / total;
             }
+
+            if (total != 0)
+                tempMean = sum / total;
 
             let sensors = [];
 
