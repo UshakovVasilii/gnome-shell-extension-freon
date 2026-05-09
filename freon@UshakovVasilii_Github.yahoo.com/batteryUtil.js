@@ -4,13 +4,23 @@ import GLib from 'gi://GLib';
 
 export default class BatteryUtil {
 
-    constructor(callback) {
+    constructor() {
         this._bat_path = [];    // Filesystem paths to batteries
+        this._updated = false;
         this._find_batteries();
+        this._updated = true;
     }
 
     get available(){
         return (this._bat_path[0]) ? true : false;
+    }
+
+    get updated() {
+        return this._updated;
+    }
+
+    set updated(updated) {
+        this._updated = updated;
     }
 
     get energy() {
@@ -36,7 +46,7 @@ export default class BatteryUtil {
             power /= 1000000.00;
 
             let state = this._get_sensor_data(bat_path, "status");
-            if (state.startsWith("Dis"))
+            if (state && state.startsWith("Dis"))
                 power *= -1;
 
             let bat_name = bat_path.split('/').pop();
@@ -71,6 +81,8 @@ export default class BatteryUtil {
     }
 
     execute(callback) {
+        this._updated = true;
+        if (callback) callback();
     }
 
     _find_batteries() {
@@ -107,4 +119,4 @@ export default class BatteryUtil {
         return "";
     }
 
-};
+}
