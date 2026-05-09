@@ -86,4 +86,4 @@ export default class LiquidctlUtil extends CommandLineUtil {
     get volt() {
         return this._volt || [];
     }
-};
+}

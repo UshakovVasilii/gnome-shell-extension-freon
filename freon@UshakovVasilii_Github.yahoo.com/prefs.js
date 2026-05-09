@@ -69,7 +69,7 @@ export default class FreonPreferences extends ExtensionPreferences {
 
         const position_in_panel = new Adw.ComboRow({
             title: _('Panel Position'),
-            model: new Gtk.StringList({strings: ["Left", "Center", "Right"] }),
+            model: new Gtk.StringList({strings: [_("Left"), _("Center"), _("Right")] }),
         })
         this._settings.bind("position-in-panel", position_in_panel, "selected", Gio.SettingsBindFlags.NO_SENSITIVITY);
         group.add(position_in_panel)
@@ -115,9 +115,9 @@ export default class FreonPreferences extends ExtensionPreferences {
 
         const freeimpi = new Adw.ComboRow({
             title: _('FreeIMPI'),
-            model: new Gtk.StringList({strings: ["Disabled", "Direct", "pkexec"] }),
+            model: new Gtk.StringList({strings: [_("Disabled"), _("Direct"), "pkexec"] }),
             selected: this._settings.get_int("freeimpi-selected"),
-            subtitle: "Read sensors using ipmi-sensors from FreeIPMI"
+            subtitle: _("Read sensors using ipmi-sensors from FreeIPMI")
         });
         this._settings.bind("freeimpi-selected", freeimpi, "selected", Gio.SettingsBindFlags.NO_SENSITIVITY);
         group.add(freeimpi);
@@ -177,11 +177,12 @@ export default class FreonPreferences extends ExtensionPreferences {
     }
 
     _addSwitch(title, key, help = "") {
-        const sw = new Adw.SwitchRow({
+        const params = {
             title: _(title),
             active: this._settings.get_boolean(key),
-            subtitle: help
-        });
+        };
+        if (help) params.subtitle = _(help);
+        const sw = new Adw.SwitchRow(params);
         this._settings.bind(key, sw, 'active', Gio.SettingsBindFlags.DEFAULT);
         return sw;
     }

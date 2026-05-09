@@ -40,7 +40,7 @@ export default class SensorsUtil extends CommandLineUtil {
                     let lineRemoved = this._output.filter(l => l.trim() !== ',').join('\n');
                     let errorRemoved = lineRemoved.replace(/ERROR.*Can't read/, "");
                     errorRemoved = errorRemoved.replace(/ERROR.*I\/O error/, "");
-                    errorRemoved = errorRemoved.replace(/NaN/, "0");
+                    errorRemoved = errorRemoved.replace(/NaN/g, "0");
                     data = JSON.parse(errorRemoved);
                 } catch (e2) {
                     logError(e2);
@@ -107,4 +107,4 @@ export default class SensorsUtil extends CommandLineUtil {
     get rpm()   { return this._groups.rpm; }
     get volt()  { return this._groups.volt; }
     get power() { return this._groups.power; }
-};
+}

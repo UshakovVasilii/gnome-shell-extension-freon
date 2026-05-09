@@ -6,11 +6,12 @@
     <key name="hot-sensors" type="as">
       <default>["__average__", "__max__"]</default>
       <summary>Sensors to show in panel</summary>
-      <description>Select the sensord whose values has to be shown in the panel</description>
+      <description>Select the sensors whose values are shown in the panel</description>
     </key>
 
     <key type="i" name="update-time">
       <default>5</default>
+      <range min="1" max="600"/>
       <summary>Seconds before next update</summary>
       <description>This is the seconds after CPU temperature extension updates the data from the system</description>
     </key>
@@ -36,7 +37,7 @@
     <key type="i" name="unit">
       <default>0</default>
       <summary>Select centigrade or fahrenheit</summary>
-      <description>Choose wether to display the Number for centigrade or fahrenheit</description>
+      <description>Choose whether to display the value in centigrade or fahrenheit</description>
     </key>
 
     <key type="b" name="show-temperature-unit">
@@ -47,8 +48,8 @@
 
     <key type="b" name="show-temperature">
       <default>true</default>
-      <summary>Show RPM on Panel</summary>
-      <description>Show RPM on Panel</description>
+      <summary>Display Temperature</summary>
+      <description>Display temperature sensors</description>
     </key>
 
     <key type="b" name="show-rotationrate-unit">
@@ -91,12 +92,6 @@
       <default>0</default>
       <summary>Selected element number in the FreeIMPI-Dropdown</summary>
       <description>Selected element number in the FreeIMPI-Dropdown</description>
-    </key>
-
-    <key type="s" name="exec-method-freeipmi">
-      <default>'Disabled'</default>
-      <summary>Method to run FreeIPMI utility</summary>
-      <description>Method to run FreeIPMI utility</description>
     </key>
 
     <key type="b" name="use-generic-liquidctl">
