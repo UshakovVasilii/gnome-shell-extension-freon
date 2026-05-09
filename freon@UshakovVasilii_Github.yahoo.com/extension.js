@@ -27,12 +27,13 @@ import BatteryUtil from './batteryUtil.js';
 
 import FreonItem from './freonItem.js';
 
+const _STACK_RE = /(?:(?:[^<.]+<\.)?([^@]+))?@(.+):(\d+):\d+/;
+
 function _makeLogFunction(prefix) {
     return msg => {
         // Grab the second line of a stack trace, i.e. caller of debug()
-        let regex = /(?:(?:[^<.]+<\.)?([^@]+))?@(.+):(\d+):\d+/g;
         let trace = ((msg.stack) ? msg : new Error()).stack.split('\n')[1];
-        let [m, func, file, line] = regex.exec(trace);
+        let [m, func, file, line] = _STACK_RE.exec(trace);
         file = GLib.path_get_basename(file);
 
         let hdr = [file, func, line].filter(k => (k)).join(':');
@@ -61,9 +62,10 @@ class FreonMenuButton extends PanelMenu.Button {
         super(0);
 
         this._extension_uuid = uuid;
+        this._extension_path = path;
         this._settings = settings;
 
-        var _debugFunc = _makeLogFunction('DEBUG');
+        const _debugFunc = _makeLogFunction('DEBUG');
         this.debug = this._settings.get_boolean('debug') ? _debugFunc : () => {};
 
         this._settings.connect('changed::debug', () => {
@@ -300,10 +302,11 @@ class FreonMenuButton extends PanelMenu.Button {
         if (exec_method != 0) {
             try {
                 if (exec_method == 1)
-                    this._utils.freeipmi = new FreeipmiUtil("direct");
+                    this._utils.freeipmi = new FreeipmiUtil("direct", this._extension_path);
                 else if (exec_method == 2)
-                    this._utils.freeipmi = new FreeipmiUtil("pkexec");
+                    this._utils.freeipmi = new FreeipmiUtil("pkexec", this._extension_path);
             } catch (e) {
+                logError(e, '[FREON] freeipmi init failed; falling back to direct');
                 if (exec_method == 2) {
                     this._settings.set_int('freeimpi-selected', 1);
                     this._freeipmiUtilityChanged();
@@ -500,12 +503,16 @@ class FreonMenuButton extends PanelMenu.Button {
     }
 
     _updateTimeChanged(){
-        GLib.Source.remove(this._timeoutId);
+        if (this._timeoutId) {
+            GLib.Source.remove(this._timeoutId);
+            this._timeoutId = 0;
+        }
         this._addTimer();
     }
 
     _addTimer(){
-        this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._settings.get_int('update-time'), () => {
+        const interval = Math.max(1, this._settings.get_int('update-time'));
+        this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, interval, () => {
             this._querySensors();
             // readd to update queue
             return true;
@@ -532,10 +539,18 @@ class FreonMenuButton extends PanelMenu.Button {
 
         this._destroyBatteryUtility();
 
-        GLib.Source.remove(this._timeoutId);
-        GLib.Source.remove(this._updateUITimeoutId);
-        if (this._positionInPanelChangedTimeoutId)
+        if (this._timeoutId) {
+            GLib.Source.remove(this._timeoutId);
+            this._timeoutId = 0;
+        }
+        if (this._updateUITimeoutId) {
+            GLib.Source.remove(this._updateUITimeoutId);
+            this._updateUITimeoutId = 0;
+        }
+        if (this._positionInPanelChangedTimeoutId) {
             GLib.Source.remove(this._positionInPanelChangedTimeoutId);
+            this._positionInPanelChangedTimeoutId = 0;
+        }
 
         for (let signal of this._settingChangedSignals){
             this._settings.disconnect(signal);
@@ -555,7 +570,7 @@ class FreonMenuButton extends PanelMenu.Button {
     _updateUI(needUpdate = false){
         for (let sensor of Object.values(this._utils)) {
             if (sensor.available && sensor.updated) {
-                this.debug(sensor + ' updated');
+                this.debug(`${sensor.constructor.name} updated`);
                 sensor.updated = false;
                 needUpdate = true;
             }
@@ -862,7 +877,7 @@ class FreonMenuButton extends PanelMenu.Button {
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         let wiki = new PopupMenu.PopupBaseMenuItem();
-        wiki.actor.add_child(new St.Label({ text: _("Go to the Freon wiki"), x_align: Clutter.ActorAlign.START, x_expand: true }));
+        wiki.add_child(new St.Label({ text: _("Go to the Freon wiki"), x_align: Clutter.ActorAlign.START, x_expand: true }));
         wiki.connect('activate', () => {
             Util.spawn(["xdg-open", "https://github.com/UshakovVasilii/gnome-shell-extension-freon/wiki"]);
         });
@@ -870,7 +885,7 @@ class FreonMenuButton extends PanelMenu.Button {
         this.menu.addMenuItem(wiki);
 
         let settings = new PopupMenu.PopupBaseMenuItem();
-        settings.actor.add_child(new St.Label({ text: _("Sensor Settings"), x_align: Clutter.ActorAlign.START, x_expand: true }));
+        settings.add_child(new St.Label({ text: _("Sensor Settings"), x_align: Clutter.ActorAlign.START, x_expand: true }));
         settings.connect('activate', () => {
             Util.spawn(["gnome-extensions", "prefs", this._extension_uuid]);
         });
@@ -942,7 +957,7 @@ class FreonMenuButton extends PanelMenu.Button {
                     } else {
                         hotSensors.push(self.key);
 
-                        if (Object.keys(this._hotLabels).length == 0) {
+                        if (Object.keys(this._hotLabels).length == 0 && this._initialIcon) {
                             this._initialIcon.destroy();
                             this._initialIcon = null;
                         }
@@ -971,10 +986,7 @@ class FreonMenuButton extends PanelMenu.Button {
                     if (Object.keys(this._hotLabels).length == 0)
                         this._createInitialIcon();
 
-                    this._settings.set_strv('hot-sensors', hotSensors.filter(
-                        function(item, pos) {
-                            return hotSensors.indexOf(item) == pos;
-                        }));
+                    this._settings.set_strv('hot-sensors', Array.from(new Set(hotSensors)));
                 });
 
                 if (this._hotLabels[key]) {
@@ -990,12 +1002,17 @@ class FreonMenuButton extends PanelMenu.Button {
                         temperatureGroup = new PopupMenu.PopupSubMenuMenuItem(_('Temperature'), true);
                         temperatureGroup.icon.gicon = this._sensorIcons['temperature'];
 
-                        if (!temperatureGroup.status) { // gnome 3.18 and hight
+                        if (!temperatureGroup.status) {
                             temperatureGroup.status = new St.Label({
                                      style_class: 'popup-status-menu-item',
                                      y_expand: true,
                                      y_align: Clutter.ActorAlign.CENTER });
-                            temperatureGroup.actor.insert_child_at_index(temperatureGroup.status, 4);
+                            const triangle = temperatureGroup._triangleBin;
+                            if (triangle && triangle.get_parent() === temperatureGroup) {
+                                temperatureGroup.insert_child_below(temperatureGroup.status, triangle);
+                            } else {
+                                temperatureGroup.add_child(temperatureGroup.status);
+                            }
                         }
 
                         this.menu.addMenuItem(temperatureGroup);
