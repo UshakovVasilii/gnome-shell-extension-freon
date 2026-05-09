@@ -5,7 +5,7 @@ import PkexecUtil from './pkexecUtil.js';
 
 export default class FreeipmiUtil extends CommandLineUtil {
 
-    constructor(exec_method) {
+    constructor(exec_method, extensionDir) {
         super();
 
         const path = GLib.find_program_in_path('ipmi-sensors');
@@ -14,19 +14,24 @@ export default class FreeipmiUtil extends CommandLineUtil {
 
         if (this._argv && exec_method === 'pkexec')
         {
-            let pkexecUtil = new PkexecUtil('ipmi-sensors');
+            let pkexecUtil = new PkexecUtil('ipmi-sensors', extensionDir);
             if (!pkexecUtil.checkOrInstall()) {
-                throw 'cannot run ipmi-sensors with pkexec';
+                throw new Error('cannot run ipmi-sensors with pkexec');
             }
             const pkexec_path = GLib.find_program_in_path('pkexec');
             this._argv = pkexec_path ? [pkexec_path].concat(this._argv) : null;
         }
     }
 
+    destroy() {
+        super.destroy();
+        this._data = null;
+    }
+
     // Avoid parsing the data more than once.
     execute(callback) {
         super.execute(() => {
-            let data = [];
+            const data = Object.create(null);
 
             for (const line of this._output) {
                 if (!line)
@@ -35,7 +40,7 @@ export default class FreeipmiUtil extends CommandLineUtil {
                 const value_list = line.split(',');
 
                 if (value_list.length <= 1)
-                    break;
+                    continue;
 
                 const id = value_list[0];
 
@@ -47,9 +52,7 @@ export default class FreeipmiUtil extends CommandLineUtil {
                 const unit = value_list[4];
 
                 if (value !== 'N/A' && unit !== 'N/A') {
-                    data[name] = {};
-                    data[name]["value"] = value;
-                    data[name]["unit"] = unit;
+                    data[name] = { value: value, unit: unit };
                 }
             }
 
@@ -70,31 +73,26 @@ export default class FreeipmiUtil extends CommandLineUtil {
         return this._parseSensorsOutput(/^V$/, 'volt');
     }
 
-  _parseSensorsOutput(sensorFilter, sensorType) {
-        if(!this._data)
+    _parseSensorsOutput(sensorFilter, sensorType) {
+        if (!this._data)
             return [];
 
         const data = this._data;
 
         let sensors = [];
         for (const name in data) {
-            if (!data.hasOwnProperty(name))
-                continue;
-
-            const value = data[name]["value"]
-            const unit = data[name]["unit"]
+            const value = data[name]["value"];
+            const unit = data[name]["unit"];
 
             if (!sensorFilter.test(unit))
                 continue;
 
-            const feature = {
+            sensors.push({
                 label: name,
                 [sensorType]: parseFloat(value)
-            };
-
-            sensors.push(feature);
+            });
         }
 
         return sensors;
     }
-};
+}
