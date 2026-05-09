@@ -56,7 +56,8 @@ export default class BumblebeeNvidiaUtil extends CommandLineUtil {
             logError(e, '[FREON] optirun nvidia-smi -L spawn failed');
             return;
         }
-        proc.communicate_utf8_async(null, null, (p, res) => {
+        proc.communicate_utf8_async(null, this._cancellable, (p, res) => {
+            if (this._destroyed) return;
             try {
                 let [, stdout] = p.communicate_utf8_finish(res);
                 for (let line of (stdout || '').split('\n')) {
@@ -67,7 +68,8 @@ export default class BumblebeeNvidiaUtil extends CommandLineUtil {
                     }
                 }
             } catch (e) {
-                logError(e, '[FREON] optirun nvidia-smi -L parse failed');
+                if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                    logError(e, '[FREON] optirun nvidia-smi -L parse failed');
             }
         });
     }
