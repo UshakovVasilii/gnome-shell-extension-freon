@@ -15,24 +15,28 @@ export default class AticonfigUtil extends CommandLineUtil {
                   Sensor 0: Temperature - 37.00 C
     */
     get temp() {
-        if(!this._output)
+        if (!this._output)
             return [];
         let label = null;
         let temp = null;
         for (let line of this._output) {
-            if(!line)
+            if (!line)
                 continue;
             let r;
-            if(line.indexOf('Adapter') > 0)
-                label = (r = /Adapter \- (.*)/.exec(line)) ? r[1] : undefined;
-            if(line.indexOf('Temperature') > 0)
-                temp = (r = /Temperature \- (\d{1,3}.\d{1,2})/.exec(line)) ? parseFloat(r[1]) : undefined;
+            if (line.indexOf('Adapter') > 0) {
+                r = /Adapter \- (.*)/.exec(line);
+                if (r) label = r[1];
+            }
+            if (line.indexOf('Temperature') > 0) {
+                r = /Temperature\s*-\s*([\d.]+)/.exec(line);
+                if (r) temp = parseFloat(r[1]);
+            }
         }
 
-        if(!label || !temp)
+        if (!label || !Number.isFinite(temp))
             return [];
 
-        return [{ label : label.trim(), temp : temp}];
+        return [{ label: label.trim(), temp: temp }];
     }
 
-};
+}

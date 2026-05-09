@@ -17,10 +17,10 @@ export default class FreonItem extends PopupMenu.PopupBaseMenuItem {
         this._gIcon = gIcon;
 
         this._labelActor = new St.Label({text: displayName ? displayName : label, x_align: Clutter.ActorAlign.CENTER, x_expand: true});
-        this.actor.add_child(new St.Icon({ style_class: 'popup-menu-icon', gicon : gIcon}));
-        this.actor.add_child(this._labelActor);
+        this.add_child(new St.Icon({ style_class: 'popup-menu-icon', gicon : gIcon}));
+        this.add_child(this._labelActor);
         this._valueLabel = new St.Label({text: value});
-        this.actor.add_child(this._valueLabel);
+        this.add_child(this._valueLabel);
     }
 
     set main(main) {
@@ -40,7 +40,7 @@ export default class FreonItem extends PopupMenu.PopupBaseMenuItem {
     }
 
     set display_name(text) {
-        return this._labelActor.text = text;
+        this._labelActor.text = text;
     }
 
     get gicon() {
