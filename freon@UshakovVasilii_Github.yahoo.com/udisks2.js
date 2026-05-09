@@ -18,13 +18,17 @@ const UDisksDriveAtaProxy = Gio.DBusProxy.makeProxyWrapper(
 const Async = {
     // mapping will be done in parallel
     map(arr, mapClb /* function(in, successClb)) */, resClb /* function(result) */) {
+        if (arr.length === 0) {
+            resClb([]);
+            return;
+        }
         let counter = arr.length;
         let result = [];
         for (let i = 0; i < arr.length; ++i) {
             mapClb(arr[i], (function(i, newVal) {
                 result[i] = newVal;
                 if (--counter == 0) resClb(result);
-            }).bind(null, i)); // i needs to be bound since it will be changed during the next iteration
+            }).bind(null, i));
         }
     }
 }
@@ -35,12 +39,16 @@ export default class UDisks2 {
     constructor(callback) {
         this._udisksProxies = [];
         this._temps = [];
+        this._cancellable = new Gio.Cancellable();
+        this._destroyed = false;
+        this._updated = false;
         this._get_drive_ata_proxies((proxies) => {
+            if (this._destroyed) return;
             this._udisksProxies = proxies;
             this._refreshTemps();
+            this._updated = true;
             if (callback) callback();
         });
-        this._updated = true;
     }
 
     get available(){
@@ -73,9 +81,10 @@ export default class UDisks2 {
 
     // calls callback with [{ drive: UDisksDriveProxy, ata: UDisksDriveAtaProxy }, ... ] for every drive that implements both interfaces
     _get_drive_ata_proxies(callback) {
-        Gio.DBusObjectManagerClient.new(Gio.DBus.system, 0, "org.freedesktop.UDisks2", "/org/freedesktop/UDisks2", null, null, function(src, res) {
+        Gio.DBusObjectManagerClient.new(Gio.DBus.system, 0, "org.freedesktop.UDisks2", "/org/freedesktop/UDisks2", null, this._cancellable, (src, res) => {
             try {
                 let objMgr = Gio.DBusObjectManagerClient.new_finish(res); //might throw
+                this._objMgr = objMgr;
 
                 let objPaths = objMgr.get_objects().filter(function(o) {
                     return o.get_interface("org.freedesktop.UDisks2.Drive") != null
@@ -83,43 +92,58 @@ export default class UDisks2 {
                 }).map(function(o) { return o.get_object_path() });
 
                 // now create the proxy objects, log and ignore every failure
-                Async.map(objPaths, function(obj, callback) {
+                Async.map(objPaths, (obj, mapCb) => {
+                    if (this._destroyed) {
+                        mapCb(null);
+                        return;
+                    }
                     // create the proxies object
-                    let driveProxy = new UDisksDriveProxy(Gio.DBus.system, "org.freedesktop.UDisks2", obj, function(res, error) {
-                        if (error) { //very unlikely - we even checked the interfaces before!
+                    let driveProxy = new UDisksDriveProxy(Gio.DBus.system, "org.freedesktop.UDisks2", obj, (res, error) => {
+                        if (error) {
                             logError(error, '[FREON] Could not create proxy on ' + obj);
-                            callback(null);
+                            mapCb(null);
                             return;
                         }
-                        let ataProxy = new UDisksDriveAtaProxy(Gio.DBus.system, "org.freedesktop.UDisks2", obj, function(res, error) {
+                        let ataProxy = new UDisksDriveAtaProxy(Gio.DBus.system, "org.freedesktop.UDisks2", obj, (res, error) => {
                             if (error) {
                                 logError(error, '[FREON] Could not create proxy on ' + obj);
-                                callback(null);
+                                mapCb(null);
                                 return;
                             }
 
-                            callback({ drive: driveProxy, ata: ataProxy });
-                        });
-                    });
+                            mapCb({ drive: driveProxy, ata: ataProxy });
+                        }, this._cancellable);
+                    }, this._cancellable);
                 }, function(proxies) {
-                    // filter out failed attempts == null values
                     callback(proxies.filter(function(a) { return a != null; }));
                 });
             } catch (e) {
-                logError(e, '[FREON] Could not find UDisks2 objects');
+                if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                    logError(e, '[FREON] Could not find UDisks2 objects');
+                callback([]);
             }
         });
     }
 
     destroy(callback) {
+        this._destroyed = true;
+        if (this._cancellable) {
+            this._cancellable.cancel();
+            this._cancellable = null;
+        }
         this._udisksProxies = [];
         this._temps = [];
+        this._objMgr = null;
     }
 
     execute(callback) {
+        if (this._destroyed) {
+            if (callback) callback();
+            return;
+        }
         this._refreshTemps();
         this._updated = true;
         if (callback) callback();
     }
 
-};
+}

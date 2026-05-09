@@ -8,9 +8,15 @@ export default class NvidiaUtil {
         this._updated = false;
         this._gpuInfo = {};
         this._output = [];
+        this._cancellable = new Gio.Cancellable();
+        this._destroyed = false;
     }
 
     async execute(callback) {
+        if (this._destroyed) {
+            if (callback) callback();
+            return;
+        }
         try {
             // Read all GPUs from /proc/driver/nvidia/gpus.
             const directory = Gio.File.new_for_path('/proc/driver/nvidia/gpus');
@@ -19,7 +25,7 @@ export default class NvidiaUtil {
                     'standard::*',
                     Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
                     GLib.PRIORITY_DEFAULT,
-                    null,
+                    this._cancellable,
                     (file_, result) => {
                         try {
                             resolve(directory.enumerate_children_finish(result));
@@ -29,11 +35,13 @@ export default class NvidiaUtil {
                     }
                 );
             });
-            const gpus = []
-    
+            if (this._destroyed) return;
+            const gpus = [];
+
             while (true) {
+                if (this._destroyed) return;
                 const infos = await new Promise((resolve, reject) => {
-                    iter.next_files_async(10, GLib.PRIORITY_DEFAULT, null, (iter_, res) => {
+                    iter.next_files_async(10, GLib.PRIORITY_DEFAULT, this._cancellable, (iter_, res) => {
                         try {
                             resolve(iter.next_files_finish(res));
                         } catch (e) {
@@ -41,21 +49,22 @@ export default class NvidiaUtil {
                         }
                     });
                 });
-    
+
                 if (infos.length === 0)
                     break;
-    
+
                 for (const info of infos)
                     gpus.push(info.get_name());
             }
-    
+
             // For each GPU...
             let gpuInfo = {};
             for (const gpu of gpus) {
+                if (this._destroyed) return;
                 // ...read /proc/driver/nvidia/gpus/<ID>/power and check if it supports sleep.
                 const file = Gio.File.new_for_path(`/proc/driver/nvidia/gpus/${gpu}/power`);
                 const [, contents, etag] = await new Promise((resolve, reject) => {
-                    file.load_contents_async(null, (file_, result) => {
+                    file.load_contents_async(this._cancellable, (file_, result) => {
                         try {
                             resolve(file.load_contents_finish(result));
                         } catch (e) {
@@ -63,7 +72,8 @@ export default class NvidiaUtil {
                         }
                     });
                 });
-    
+                if (this._destroyed) return;
+
                 // If the GPU is sleeping, don't poll it.
                 const decoder = new TextDecoder('utf-8');
                 const contentsString = decoder.decode(contents);
@@ -79,31 +89,38 @@ export default class NvidiaUtil {
                     gpuInfo[gpu] = prevGpuInfo;
                     continue;
                 }
-                
+
                 // Poll the GPU.
                 gpuInfo[gpu] = { output: await this.getGpuInfo(gpu) };
-                
+                if (this._destroyed) return;
+
                 // If runtime D3 is enabled and the GPU is eligible to sleep...
                 try {
                     const sleepEligible = await this.isGpuEligibleToSleep(gpu);
+                    if (this._destroyed) return;
                     if (contentsString.split('\n')[0].includes('Enabled') && sleepEligible) {
                         // ...skip polling it for 30 seconds.
                         gpuInfo[gpu].skipUntil = Date.now() + 30000;
                     }
                 } catch (e) {
-                    console.error(e);
+                    if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                        console.error(e);
                 }
             }
+            if (this._destroyed) return;
             this._gpuInfo = gpuInfo;
             this._output = Object.keys(this._gpuInfo)
                 .sort()
                 .map(gpu => gpuInfo[gpu].output)
                 .filter(output => !!output);
         } catch (e) {
-            console.error(e);
+            if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                console.error(e);
         } finally {
-            callback();
-            this._updated = true;
+            if (!this._destroyed) {
+                this._updated = true;
+                if (callback) callback();
+            }
         }
     }
 
@@ -114,7 +131,7 @@ export default class NvidiaUtil {
                 Gio.SubprocessFlags.STDOUT_PIPE |
                 Gio.SubprocessFlags.STDERR_PIPE);
 
-            proc.communicate_utf8_async(null, null, (proc, result) => {
+            proc.communicate_utf8_async(null, this._cancellable, (proc, result) => {
                 try {
                     let [, stdout, stderr] = proc.communicate_utf8_finish(result);
                     const processes = stdout ? stdout.trim().split('\n').slice(2) : [];
@@ -139,7 +156,7 @@ export default class NvidiaUtil {
                 Gio.SubprocessFlags.STDOUT_PIPE |
                 Gio.SubprocessFlags.STDERR_PIPE);
 
-            proc.communicate_utf8_async(null, null, (proc, result) => {
+            proc.communicate_utf8_async(null, this._cancellable, (proc, result) => {
                 try {
                     let [, stdout, stderr] = proc.communicate_utf8_finish(result);
                     resolve(stdout ? stdout.trim() : '');
@@ -184,8 +201,13 @@ export default class NvidiaUtil {
         this._updated = updated;
     }
 
-    destroy(callback) {
+    destroy() {
+        this._destroyed = true;
+        if (this._cancellable) {
+            this._cancellable.cancel();
+            this._cancellable = null;
+        }
         this._gpuInfo = {};
         this._output = [];
     }
-};
+}
