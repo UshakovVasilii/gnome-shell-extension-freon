@@ -1,76 +1,132 @@
+import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 import CommandLineUtil from './commandLineUtil.js';
 
-function run_command(argv) {
-    return new TextDecoder().decode(GLib.spawn_command_line_sync(argv)[1]).trim();
+function spawnAsync(argv, cancellable, cb) {
+    let proc;
+    try {
+        proc = Gio.Subprocess.new(argv,
+            Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE);
+    } catch (e) {
+        cb({ ok: false, status: -1, stdout: '' });
+        return;
+    }
+    proc.communicate_utf8_async(null, cancellable, (p, res) => {
+        try {
+            let [, stdout] = p.communicate_utf8_finish(res);
+            cb({ ok: proc.get_successful(), status: proc.get_exit_status(), stdout: stdout || '' });
+        } catch (e) {
+            if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                logError(e, '[FREON] hddtemp probe failed');
+            cb({ ok: false, status: -1, stdout: '' });
+        }
+    });
 }
 
 export default class HddtempUtil extends CommandLineUtil {
 
     constructor() {
         super();
-        let hddtempArgv = GLib.find_program_in_path('hddtemp');
-        if(hddtempArgv) {
+        this._sep = ': ';
+        this._probe();
+    }
+
+    _probe() {
+        const hddtempPath = GLib.find_program_in_path('hddtemp');
+        if (hddtempPath) {
             // check if this user can run hddtemp directly.
-            if(!GLib.spawn_command_line_sync(hddtempArgv)[3]){
-                this._argv = [hddtempArgv];
-                return;
-            }
+            spawnAsync([hddtempPath], this._cancellable, (res) => {
+                if (this._destroyed) return;
+                if (res.status === 0) {
+                    this._argv = [hddtempPath];
+                    this._sep = ': ';
+                    return;
+                }
+                this._probeDaemon();
+            });
+        } else {
+            this._probeDaemon();
         }
+    }
 
+    _probeDaemon() {
         // doesn't seem to be the case… is it running as a daemon?
-        // Check first for systemd
-        let systemctl = GLib.find_program_in_path('systemctl');
-        let pidof = GLib.find_program_in_path('pidof');
-        let nc = GLib.find_program_in_path('nc');
-        let pid = undefined;
+        const systemctl = GLib.find_program_in_path('systemctl');
+        const pidof = GLib.find_program_in_path('pidof');
+        const nc = GLib.find_program_in_path('nc');
+        if (!nc) return;
 
-        if(systemctl) {
-            let activeState = run_command(systemctl + " show hddtemp.service -p ActiveState");
-            if(activeState == "ActiveState=active") {
-                let output = run_command(systemctl + " show hddtemp.service -p MainPID");
-
-                if(output.length && output.split("=").length == 2)
-                    pid = Number(output.split("=")[1].trim());
-            }
-        }
-
-        // systemd isn't used on this system, try sysvinit instead
-        if(!pid && pidof) {
-            let output = run_command("pidof hddtemp");
-            if(output.length)
-                pid = Number(output.trim());
-        }
-
-        if(nc && pid) {
+        const finalize = (pid) => {
+            if (this._destroyed || !pid) return;
             // get daemon command line
-            let [, cmdlineBytes] = GLib.file_get_contents('/proc/'+pid+'/cmdline');
-            let cmdline = new TextDecoder().decode(cmdlineBytes);
-            // get port or assume default
-            let match = /(-p\W*|--port=)(\d{1,5})/.exec(cmdline)
-            let port = match ? parseInt(match[2]) : 7634;
-            // use net cat to get data
+            let port = 7634;
+            try {
+                let [ok, cmdlineBytes] = GLib.file_get_contents('/proc/' + pid + '/cmdline');
+                if (ok) {
+                    let cmdline = new TextDecoder().decode(cmdlineBytes);
+                    let match = /(-p\W*|--port=)(\d{1,5})/.exec(cmdline);
+                    if (match) port = parseInt(match[2]);
+                }
+            } catch (e) {
+                // ignore; use default port
+            }
             this._argv = [nc, 'localhost', port.toString()];
+            this._sep = '|';
+        };
+
+        if (systemctl) {
+            spawnAsync([systemctl, 'show', 'hddtemp.service', '-p', 'ActiveState'], this._cancellable, (res) => {
+                if (this._destroyed) return;
+                if (res.stdout.trim() === 'ActiveState=active') {
+                    spawnAsync([systemctl, 'show', 'hddtemp.service', '-p', 'MainPID'], this._cancellable, (res2) => {
+                        if (this._destroyed) return;
+                        let parts = res2.stdout.trim().split('=');
+                        let pid = parts.length === 2 ? Number(parts[1]) : 0;
+                        if (pid) {
+                            finalize(pid);
+                        } else if (pidof) {
+                            spawnAsync([pidof, 'hddtemp'], this._cancellable, (r) => {
+                                if (this._destroyed) return;
+                                let p = Number(r.stdout.trim());
+                                if (p) finalize(p);
+                            });
+                        }
+                    });
+                } else if (pidof) {
+                    spawnAsync([pidof, 'hddtemp'], this._cancellable, (r) => {
+                        if (this._destroyed) return;
+                        let p = Number(r.stdout.trim());
+                        if (p) finalize(p);
+                    });
+                }
+            });
+        } else if (pidof) {
+            spawnAsync([pidof, 'hddtemp'], this._cancellable, (r) => {
+                if (this._destroyed) return;
+                let p = Number(r.stdout.trim());
+                if (p) finalize(p);
+            });
         }
     }
 
     get temp() {
-        if(!this._output)
+        if (!this._output)
             return [];
 
-        let sep = /nc$/.exec(this._argv[0]) ? '|' : ': ';
+        const sep = this._sep;
         let hddtempOutput = [];
-        if (this._output.join().indexOf(sep+sep) > 0) {
-            hddtempOutput = this._output.join().split(sep+sep);
+        if (this._output.join().indexOf(sep + sep) > 0) {
+            hddtempOutput = this._output.join().split(sep + sep);
         } else {
             hddtempOutput = this._output;
         }
 
         let sensors = [];
         for (let line of hddtempOutput) {
-            let fields = line.split(sep).filter(function(e){ return e; });
-            let sensor = { label: fields[1], temp: parseFloat(fields[2])};
+            let fields = line.split(sep).filter(function(e) { return e; });
+            if (fields.length < 3) continue;
+            let sensor = { label: fields[1], temp: parseFloat(fields[2]) };
             //push only if the temp is a Number
             if (!isNaN(sensor.temp))
                 sensors.push(sensor);
@@ -79,4 +135,4 @@ export default class HddtempUtil extends CommandLineUtil {
         return sensors;
     }
 
-};
+}
