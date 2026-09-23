@@ -1,133 +1,196 @@
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: freon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-06 17:05-0300\n"
-"PO-Revision-Date: 2018-02-03 01:30+0100\n"
-"Language-Team: POLISH <jakub.zywiec@gmail.com>\n"
+"POT-Creation-Date: 2026-09-23 22:43+0000\n"
+"PO-Revision-Date: 2026-09-23 22:44+0200\n"
+"Last-Translator: Tomasz Bojanowski <tomasz@bojanowski.me>\n"
+"Language-Team: Polish\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
-"Last-Translator: Jakub Żywiec <jakub.zywiec@gmail.com>\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"Language: pl\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 
-#: bumblebeeNvidiaUtil.js:75 prefs.js:82
+#: bumblebeeNvidiaUtil.js:78
 msgid "Bumblebee + NVIDIA"
 msgstr "Bumblebee + NVIDIA"
 
-#: extension.js:319
-msgid "Average"
-msgstr "Średnia"
-
-#: extension.js:320
-msgid "Maximum"
-msgstr "Maksymalna"
-
-#: extension.js:341
-#, javascript-format
-msgid "%drpm"
-msgstr "%drpm"
-
-#: extension.js:350
-#, javascript-format
-msgid "%s%.2fV"
-msgstr "%s%.2fV"
-
-#: extension.js:396
+#: extension.js:688
 msgid "Please run sensors-detect as root."
-msgstr "Uruchom \"sensors-detect\" jako użytkownik root."
+msgstr "Uruchom polecenie sensors-detect jako użytkownik root."
 
-#: extension.js:397
+#: extension.js:689
 msgid ""
 "Please install lm_sensors.\n"
 "If this doesn't help, click here to report with your sensors output!"
 msgstr ""
-"Zainstaluj \"lm_sensors\"\n"
-"Jeśli to nie pomoże, kliknij tutaj, aby zgłosić wyniki czujników!"
+"Zainstaluj pakiet lm_sensors.\n"
+"Jeżeli problem nie ustąpi, kliknij tutaj, aby go zgłosić i dołączyć wynik polecenia sensors."
 
-#: extension.js:488
-msgid "Temperature Sensors"
-msgstr "Czujnik temperatury"
+#: extension.js:756
+msgid "Average"
+msgstr "Średnia"
 
-#: extension.js:495
+#: extension.js:763
+msgid "Maximum"
+msgstr "Maksymalna"
+
+#: extension.js:779
+msgid " rpm"
+msgstr " obr./min"
+
+#: extension.js:785
+#, javascript-format
+msgid "%d%s"
+msgstr "%d%s"
+
+#: extension.js:793
+msgid "V"
+msgstr " V"
+
+#: extension.js:799 extension.js:813
+#, javascript-format
+msgid "%s%.2f%s"
+msgstr "%s%.2f%s"
+
+#: extension.js:804
+msgid "W"
+msgstr " W"
+
+#: extension.js:864
+msgid "Go to the Freon wiki"
+msgstr "Przejdź do wiki rozszerzenia Freon"
+
+#: extension.js:872
+msgid "Sensor Settings"
+msgstr "Ustawienia czujników"
+
+#: extension.js:989 prefs.js:159 prefs.js:173
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: extension.js:1006 prefs.js:160 prefs.js:174
+msgid "Rotation Rate"
+msgstr "Prędkość obrotowa"
+
+#: extension.js:1014 prefs.js:161 prefs.js:175
 msgid "Voltage"
 msgstr "Napięcie"
 
-#: extension.js:509
-msgid "Sensors Settings"
-msgstr "Ustawienia czujników"
+#: prefs.js:21
+msgid "General"
+msgstr "Ogólne"
 
-#: prefs.js:33
-msgid "Poll Sensors Every (sec)"
-msgstr "Aktualizuj czujniki co (sek)"
+#: prefs.js:54
+msgid "Display Options"
+msgstr "Ustawienia wyświetlania"
 
-#: prefs.js:39
-msgid "Show Decimal Value"
-msgstr "Pokaż wartość dziesiętną"
+#: prefs.js:59
+msgid "Sensor Polling Interval"
+msgstr "Odstęp między odczytami czujników"
 
-#: prefs.js:40
-msgid "Show one digit after decimal"
-msgstr "Wyświetlaj do jednego miejsca po przecinku"
+#: prefs.js:71
+msgid "Panel Position"
+msgstr "Położenie na panelu"
 
-#: prefs.js:45
+#: prefs.js:79
+msgid "Index on Panel"
+msgstr "Kolejność na panelu"
+
+#: prefs.js:90
+msgid "Show Icon on Panel"
+msgstr "Wyświetlanie ikony na panelu"
+
+#: prefs.js:93
 msgid "Temperature Unit"
 msgstr "Jednostka temperatury"
 
-#: prefs.js:51
-msgid "Position in Panel"
-msgstr "Pozycja w Panelu"
+#: prefs.js:99
+msgid "Show Temperature Unit"
+msgstr "Wyświetlanie jednostki temperatury"
 
-#: prefs.js:55
-msgid "Show Icon on Panel"
-msgstr "Pokaż ikonę w Panelu"
+#: prefs.js:100
+msgid "Show Rotation Rate Unit"
+msgstr "Wyświetlanie jednostki prędkości obrotowej"
 
-#: prefs.js:58
-msgid "Show Fan Speed"
-msgstr "Pokaż prędkość wentylatora"
+#: prefs.js:101
+msgid "Show Voltage Unit"
+msgstr "Wyświetlanie jednostki napięcia"
 
-#: prefs.js:61
-msgid "Show Power Supply Voltage"
-msgstr "Pokaż napięcie zasilacza"
+#: prefs.js:102
+msgid "Show Power Unit"
+msgstr "Wyświetlanie jednostki mocy"
 
-#: prefs.js:64
-msgid "Group Temperature Items"
-msgstr "Grupuj temperatury"
+#: prefs.js:103
+msgid "Show Decimal Values"
+msgstr "Wyświetlanie części dziesiętnych"
 
-#: prefs.js:65
-msgid "Works if you have more than three temperature sensors"
-msgstr "Zadziała, jeśli funkcjonują co najmniej trzy czujniki temperatury"
+#: prefs.js:109
+msgid "Generic Sensor Providers"
+msgstr "Ogólne źródła danych czujników"
 
-#: prefs.js:68
-msgid "Group Voltage Items"
-msgstr "Grupuj napięcia"
+#: prefs.js:113
+msgid "lm-sensors"
+msgstr "lm-sensors"
 
-#: prefs.js:69
-msgid "Works if you have more than three voltage sensors"
-msgstr "Zadziała, jeśli funkcjonują co najmniej trzy czujniki napięcia"
+#: prefs.js:114
+msgid "liquidctl"
+msgstr "liquidctl"
 
-#: prefs.js:74
-msgid "HDD/SSD Temperature Utility"
-msgstr ""
-"Narzędzie do pomiaru\n"
-"temperatury twardego dysku"
+#: prefs.js:117
+msgid "FreeIMPI"
+msgstr "FreeIPMI"
 
-#: prefs.js:79
-msgid "None"
-msgstr "Brak"
+#: prefs.js:130
+msgid "GPU Sensor Providers"
+msgstr "Źródła danych czujników karty graficznej"
 
-#: prefs.js:80
-msgid "NVIDIA"
-msgstr "NVIDIA"
+#: prefs.js:133
+msgid "Nvidia"
+msgstr "Nvidia"
 
-#: prefs.js:81
+#: prefs.js:134
+msgid "Bumblebee + Nvidia"
+msgstr "Bumblebee + Nvidia"
+
+#: prefs.js:135
 msgid "Catalyst"
 msgstr "Catalyst"
 
-#: prefs.js:84
-msgid "Video Card Temperature Utility"
-msgstr ""
-"Narzędzie do pomiaru\n"
-"temperatury karty graficzenej"
+#: prefs.js:142
+msgid "Drive Sensor Providers"
+msgstr "Źródła danych czujników dysków"
+
+#: prefs.js:145
+msgid "Udisks2"
+msgstr "Udisks2"
+
+#: prefs.js:146
+msgid "Hddtemp"
+msgstr "Hddtemp"
+
+#: prefs.js:147
+msgid "smartctl"
+msgstr "smartctl"
+
+#: prefs.js:148
+msgid "nvme-cli"
+msgstr "nvme-cli"
+
+#: prefs.js:155
+msgid "Show Sensors"
+msgstr "Wyświetlane czujniki"
+
+#: prefs.js:162
+msgid "Power"
+msgstr "Moc"
+
+#: prefs.js:163
+msgid "Battery"
+msgstr "Akumulator"
+
+#: prefs.js:169
+msgid "Group Items"
+msgstr "Grupowanie elementów"
