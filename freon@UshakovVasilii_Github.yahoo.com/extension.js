@@ -810,7 +810,7 @@ class FreonMenuButton extends PanelMenu.Button {
                     icon: _icon,
                     type: 'power',
                     label: power.label,
-                    value: _("%s%.2f%s").format(((power.power >= 0) ? '+' : ''),
+                    value: _("%s%.2f%s").format(((power.power > 0) ? '+' : ''),
                     power.power, unit)});
             }
 
