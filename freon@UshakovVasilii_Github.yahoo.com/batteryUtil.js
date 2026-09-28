@@ -1,3 +1,4 @@
+import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 
@@ -73,22 +74,23 @@ export default class BatteryUtil {
     }
 
     _find_batteries() {
-        const cmd = `find /sys/class/power_supply/ -type l -name "BAT*"`
-        let cmd_res = []
+        const powerSupply = Gio.File.new_for_path('/sys/class/power_supply');
+        let enumerator;
         try {
-            cmd_res = GLib.spawn_command_line_sync(cmd)
+            enumerator = powerSupply.enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
+            let info;
+            while ((info = enumerator.next_file(null)) !== null) {
+                const path = powerSupply.get_child(info.get_name()).get_path();
+                if (this._get_sensor_data(path, 'type').trim() === 'Battery')
+                    this._bat_path.push(path);
+            }
         } catch (e) {
-            logError(e, `[FREON] failed to execute "find"`)
+            logError(e, '[FREON] failed to enumerate power supplies');
+        } finally {
+            if (enumerator)
+                enumerator.close(null);
         }
-        if (cmd_res[0] == true) {
-            this._bat_path = new TextDecoder().decode( cmd_res[1] ).split('\n')
-            let trailing_path = this._bat_path.pop()
-            if (trailing_path.length > 1)   // remove empty trailing Elements
-                this._bat_path.push(trailing_path)
-        }
-        else {
-            print(`"find" returned an error: ${cmd_res[2]}`)
-        }
+        this._bat_path.sort();
     }
 
     _get_sensor_data(bat_path, sensor) {
