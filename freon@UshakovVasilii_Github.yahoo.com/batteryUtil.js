@@ -4,7 +4,7 @@ import GLib from 'gi://GLib';
 export default class BatteryUtil {
 
     constructor(callback) {
-        this._bat_path = [];    // Path to batteries for cat
+        this._bat_path = [];    // Paths to battery devices
         this._find_batteries();
     }
 
@@ -92,19 +92,15 @@ export default class BatteryUtil {
     }
 
     _get_sensor_data(bat_path, sensor) {
-        const path = `${bat_path}/${sensor}`
-        const cmd = "cat " + path;
-
-        let cmd_res = []
+        const path = `${bat_path}/${sensor}`;
         try {
-            cmd_res = GLib.spawn_command_line_sync(cmd)
+            const [ok, contents] = GLib.file_get_contents(path);
+            if (ok)
+                return new TextDecoder().decode(contents);
         } catch (e) {
-            logError(e, `[FREON] failed to execute "cat"`)
+            logError(e, `[FREON] failed to read ${path}`);
         }
-        if (cmd_res[0] == true)
-            return new TextDecoder().decode(cmd_res[1])
-        else
-            return ""
+        return "";
     }
 
 };
